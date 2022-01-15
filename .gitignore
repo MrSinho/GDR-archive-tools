@@ -57,3 +57,5 @@ build/*
 .vs/*
 gaia_csv/*
 gaia_bin/*
+
+.release/*
