@@ -1,5 +1,5 @@
-#ifndef GAIA_ARCHIVE_CONVERTER_H
-#define GAIA_ARCHIVE_CONVERTER_H
+#ifndef GAIA_ARCHIVE_TOOLS_H
+#define GAIA_ARCHIVE_TOOLS_H
 
 #include <stdint.h>
 
@@ -48,4 +48,4 @@ typedef struct GaiaCelestialBody {
 
 extern void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
 
-#endif//GAIA_ARCHIVE_CONVERTER
+#endif//GAIA_ARCHIVE_TOOLS

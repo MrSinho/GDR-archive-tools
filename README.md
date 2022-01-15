@@ -1,4 +1,4 @@
-# ESA Gaia EDR3 Archive
+# ESA Gaia EDR3 Archive Tools
 <p float="left">
   <img src="https://www.cosmos.esa.int/documents/29201/0/Gaia_logo.png/62960d22-cdd9-02a2-c9d0-1bda19ab67cf?t=1607347628590" alt="drawing" width="170"/>
   <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
@@ -47,7 +47,7 @@ To export a certain number of celestial objects:
 ## [Data types and celestial objects size](https://gaia.aip.de/metadata/gaiaedr3/gaia_universe_model/)
 The structure that handles the data of a celestial object has a total size of `186` bytes. The meaning of each variable and the full [documentation](https://www.cosmos.esa.int/web/gaia-users/archive/gedr3-documentation) of the Gaia Archive can be found by checking the [official web page](https://www.cosmos.esa.int/web/gaia/home).
 ```c
-//defined in gaia_archive_converter/include/gaia_archive_converter/gaia_archive_converter.h
+//defined in gaia_archive_tools/include/gaia_archive_tools/gaia_archive_tools.h
 typedef struct GaiaCelestialBody { 
     char        source_extended_id[20];
     uint64_t    source_id;
