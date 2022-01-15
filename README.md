@@ -5,17 +5,20 @@
 </p>
 
 ## [About the mission](https://www.esa.int/Science_Exploration/Space_Science/Gaia)
-```bash
-Gaia will create an extraordinarily precise three-dimensional map of more than a thousand million stars throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature and composition. This huge stellar census will provide the data needed to tackle an enormous range of important questions related to the origin, structure and evolutionary history of our galaxy.
-```
-The billion pixel camera and after more than 7 years in space, the Gaia project is near to its glorius end, after `Gaia Data Release 1`, `Gaia Data Release 2` and `Gaia Early Data Release 3`
+
+*Gaia will create an extraordinarily precise three-dimensional map of more than a thousand million stars throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature and composition. This huge stellar census will provide the data needed to tackle an enormous range of important questions related to the origin, structure and evolutionary history of our galaxy.*
+
+Thanks to a billion pixel camera and after more than 7 years in space, the Gaia project has given us many details about the Universe, thanks to **`Gaia Data Release 1`**, **`Gaia Data Release 2`** and **`Gaia Early Data Release 3`**. 
+
+In 2022 the **`Gaia Data Release 3`** is going to be be available to the public.
 
 ## [Gaia License](https://www.cosmos.esa.int/web/gaia-users/license)
-```
-Use of the Gaia data comes with the following license:
 
-"The Gaia data are open and free to use, provided credit is given to 'ESA/Gaia/DPAC'. In general, access to, and use of, ESA's Gaia Archive (hereafter called 'the website') constitutes acceptance of the following general terms and conditions. Neither ESA nor any other party involved in creating, producing, or delivering the website shall be liable for any direct, incidental, consequential, indirect, or punitive damages arising out of user access to, or use of, the website. The website does not guarantee the accuracy of information provided by external sources and accepts no responsibility or liability for any consequences arising from the use of such data."
-```
+*Use of the Gaia data comes with the following license:*
+
+*"The Gaia data are open and free to use, provided credit is given to 'ESA/Gaia/DPAC'. In general, access to, and use of, ESA's Gaia Archive (hereafter called 'the website') constitutes acceptance of the following general terms and conditions. Neither ESA nor any other party involved in creating, producing, or delivering the website shall be liable for any direct, incidental, consequential, indirect, or punitive damages arising out of user access to, or use of, the website. The website does not guarantee the accuracy of information provided by external sources and accepts no responsibility or liability for any consequences arising from the use of such data."*
+
+## About this repository
 
 This unofficial repository collects the tools to pack the universe model csv files in a binary format. There is also a python scripts to download and unzip the resources. The original data can be found [here](http://cdn.gea.esac.esa.int/).
 
@@ -88,5 +91,3 @@ typedef struct GaiaCelestialBody {
     float       variability_phase;
 } GaiaCelestialBody;
 ```
-
-
