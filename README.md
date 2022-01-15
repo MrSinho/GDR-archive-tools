@@ -1,4 +1,4 @@
-# ESA Gaia EDR3 Archive Tools
+# ESA Gaia Archive Tools
 <p float="left">
   <img src="https://www.cosmos.esa.int/documents/29201/0/Gaia_logo.png/62960d22-cdd9-02a2-c9d0-1bda19ab67cf?t=1607347628590" alt="drawing" width="170"/>
   <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
@@ -23,7 +23,7 @@ In 2022 the **`Gaia Data Release 3`** is going to be be available to the public.
 This unofficial repository collects the tools to pack the universe model csv files in a binary format. There is also a python scripts to download and unzip the resources. The original data can be found [here](http://cdn.gea.esac.esa.int/).
 
 ## Download CSV files
-To download the [csv files](http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/) run the `download_catalogues.py` script:
+To download the **`Gaia EDR 3`** [csv files](http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/) run the `download_catalogues.py` script:
 ```bash
 cd scripts
 python -m pip install requests
