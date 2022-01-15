@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+bin/*
+build/*
+.vscode/*
+.vs/*
+gaia_csv/*
+gaia_bin/*
