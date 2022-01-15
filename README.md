@@ -1,6 +1,6 @@
 # ESA Gaia archive
-<img src="https://www.cosmos.esa.int/documents/29201/0/Gaia_logo.png/62960d22-cdd9-02a2-c9d0-1bda19ab67cf?t=1607347628590" alt="drawing" width="170"/> 
-<img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
+<img src="https://www.cosmos.esa.int/documents/29201/0/Gaia_logo.png/62960d22-cdd9-02a2-c9d0-1bda19ab67cf?t=1607347628590" alt="drawing" width="130"/> 
+<img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="210"/> 
 
 This unofficial repository collects the universe model csv files in a binary format. There is also a python scripts to download and unzip the resources. The original data can be found [here](http://cdn.gea.esac.esa.int/).
 
