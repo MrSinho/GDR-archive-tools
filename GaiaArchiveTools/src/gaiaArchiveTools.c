@@ -1,4 +1,4 @@
-#include "gaia_archive_tools/gaiaArchiveTools.h"
+#include "gaia_archive_tools/gaia_archive_tools.h"
 #include "csv-fast-reader/csv.h"
 
 #include <stdlib.h>
@@ -9,53 +9,6 @@
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)
 #endif//_MSC_VER
-
-#define SOURCE_EXTENDED_ID_IDX          0
-#define SOURCE_ID_IDX                   1
-#define SOLUTION_ID_IDX                 2
-#define RA_IDX                          3
-#define DEC_IDX                         4
-#define BARYCENTRIC_DISTANCE_IDX        5
-#define PMRA_IDX                        6
-#define PMDEC_IDX                       7
-#define RADIAL_VELOCITY_IDX             8
-#define MAG_G_IDX                       9
-#define MAG_BP_IDX                      10
-#define MAG_RP_IDX                      11
-#define MAG_RVS_IDX                     12
-#define V_I_IDX                         13
-#define MEAN_ABSOLUTE_V_IDX             14
-#define AG_IDX                          15
-#define AV_IDX                          16
-#define TEFF_IDX                        17
-#define SPECTRAL_TYPE_IDX               18
-#define LOGG_IDX                        19
-#define FEH_IDX                         20
-#define ALPHAFE_IDX                     21
-#define MBOL_IDX                        22
-#define AGE_IDX                         23
-#define MASS_IDX                        24
-#define RADIUS_IDX                      25
-#define VSINI_IDX                       26
-#define POPULATION_IDX                  27
-#define HAS_PHOTOCENTER_MOTION_IDX      28
-#define NC_IDX                          29
-#define NT_IDX                          30
-#define SEMIMAJOR_AXIS_IDX              31
-#define ECCENTRICITY_IDX                32
-#define INCLINATION_IDX                 33
-#define LONGITUDE_ASCENDING_NODE_IDX    34
-#define ORBIT_PERIOD_IDX                35
-#define PERIASTRON_DATE_IDX             36
-#define PERIASTRON_ARGUMENT_IDX         37
-#define VARIABILITY_AMPLITUDE_IDX       38
-#define VARIABILITY_TYPE_IDX			39
-#define VARIABILITY_PERIOD_IDX          40
-#define VARIABILITY_PHASE_IDX           41
-
-#define GAIA_BODY_VARIABLES 42
-
-#define GAIA_BODY_SIZE 186
 
 void gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream) {
 	uint8_t _val = val;
@@ -99,6 +52,103 @@ void gaiaWriteBoolean(const char* src, uint32_t* p_offset, FILE* dst_stream) {
 void gaiaWriteInt(const uint32_t val, uint32_t* p_offset, FILE* dst_stream) {
 	const uint32_t _val = val;
 	gaiaWriteBuffer((void*)&_val, 4, p_offset, dst_stream);
+}
+
+
+
+
+void gaiaReadByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream) {
+	uint8_t _val = val;
+	fread(&_val, 1, 1, dst_stream);
+	fseek(dst_stream, 0, SEEK_SET);
+	(*p_offset)++;
+	fseek(dst_stream, *p_offset, SEEK_SET);
+}
+
+void gaiaReadBuffer(void* dst, const uint32_t size, uint32_t* p_offset, FILE* dst_stream) {
+	fread(dst, 1, size, dst_stream);
+	fseek(dst_stream, 0, SEEK_SET);
+	(*p_offset) += size;
+	fseek(dst_stream, *p_offset, SEEK_CUR);
+}
+
+void gaiaReadLong(uint64_t* p_val, uint32_t* p_offset, FILE* dst_stream) {
+	gaiaReadBuffer((void*)p_val, 8, p_offset, dst_stream);
+}
+
+void gaiaReadDouble(double* p_val, uint32_t* p_offset, FILE* dst_stream) {
+	gaiaReadBuffer((void*)p_val, 8, p_offset, dst_stream);
+}
+
+void gaiaReadFloat(float* p_val, uint32_t* p_offset, FILE* dst_stream) {
+	gaiaReadBuffer((void*)p_val, 4, p_offset, dst_stream);
+}
+
+void gaiaReadBoolean(const char* src, uint32_t* p_offset, FILE* dst_stream) {
+	if (strcmp(src, "True") == 0) {
+		gaiaReadByte(1, p_offset, dst_stream);
+	}
+	else {
+		gaiaReadByte(0, p_offset, dst_stream);
+	}
+}
+
+void gaiaReadInt(uint32_t* p_val, uint32_t* p_offset, FILE* dst_stream) {
+	gaiaReadBuffer((void*)p_val, 4, p_offset, dst_stream);
+}
+
+void gaiaReadBinary(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t size, void* dst) {
+	FILE* src_stream = fopen(src_path, "rb");
+	assert(src_stream != NULL);
+
+	for (uint32_t offset = 0; offset < size;) {
+		if (flags & SOURCE_EXTENDED_ID)			{ gaiaReadBuffer((void*)((char*)dst)[offset], 20, &offset, src_stream); }
+		if (flags & SOURCE_ID)					{ gaiaReadLong((uint64_t*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & SOLUTION_ID)				{ gaiaReadLong((uint64_t*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & RA)							{ gaiaReadDouble((double*)((char*)dst)[offset], &offset, src_stream);	 }
+		if (flags & DEC)						{ gaiaReadDouble((double*)((char*)dst)[offset], &offset, src_stream);	 }
+		if (flags & BARYCENTRIC_DISTANCE)		{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & PMRA)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & PMDEC)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & RADIAL_VELOCITY)			{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MAG_G)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MAG_BP)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MAG_RP)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MAG_RVS)					{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & V_I)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MEAN_ABSOLUTE_V)			{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & AG)							{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & AV)							{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & TEFF)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & LOGG)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & FEH)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & ALPHAFE)					{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MBOL)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & AGE)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & MASS)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & RADIUS)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & VSINI)						{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & POPULATION)					{ gaiaReadByte(((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & HAS_PHOTOCENTER_MOTION)		{ gaiaReadBoolean((uint8_t*)((char*)dst)[offset], &offset, src_stream);	 }
+		if (flags & NC)							{ gaiaReadInt((uint32_t*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & NT)							{ gaiaReadInt((uint32_t*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & SEMIMAJOR_AXIS)				{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & ECCENTRICITY)				{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & INCLINATION)				{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & LONGITUDE_ASCENDING_NODE)	{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & ORBIT_PERIOD)				{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & PERIASTRON_DATE)			{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & PERIASTRON_ARGUMENT)		{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & VARIABILITY_AMPLITUDE)		{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & VARIABILITY_PERIOD)			{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+		if (flags & VARIABILITY_PHASE)			{ gaiaReadFloat((float*)((char*)dst)[offset], &offset, src_stream);		 }
+	}
+
+	fclose(src_stream);
+}
+
+void gaiaReadFullBinary(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t* size, void* dst) {
+
 }
 
 void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count) {
