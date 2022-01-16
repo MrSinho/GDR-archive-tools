@@ -4,7 +4,7 @@
   <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
 </p>
 
-## [About the mission](https://www.esa.int/Science_Exploration/Space_Science/Gaia)
+## [About the mission](https://www.esa.int/Science-exploration/Space_Science/Gaia)
 
 *Gaia will create an extraordinarily precise three-dimensional map of more than a thousand million stars throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature and composition. This huge stellar census will provide the data needed to tackle an enormous range of important questions related to the origin, structure and evolutionary history of our galaxy.*
 
@@ -37,17 +37,17 @@ The `csv` files will be found in `gaia_csv`.
 To export an entire csv file in a binary format (first argument is the source path, second argument is the destination path):
 ```bash
 cd bin
-./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin
+./gaia-exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin
 ```
 To export a certain number of celestial objects:
 ```bash
-./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin 10 #export celestial objects from row 1 to 10
+./gaia-exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin 10 #export celestial objects from row 1 to 10
 ```
 
 ## [Data types and celestial objects size](https://gaia.aip.de/metadata/gaiaedr3/gaia_universe_model/)
 The structure that handles the data of a celestial object has a total size of `186` bytes. The meaning of each variable and the full [documentation](https://www.cosmos.esa.int/web/gaia-users/archive/gedr3-documentation) of the Gaia Archive can be found by checking the [official web page](https://www.cosmos.esa.int/web/gaia/home).
 ```c
-//defined in gaia_archive_tools/include/gaia_archive_tools/gaia_archive_tools.h
+//defined in GaiaArchiveTools/include/gaia_archive_tools/gaia_archive_tools.h
 typedef struct GaiaCelestialBody { 
     char        source_extended_id[20];
     uint64_t    source_id;
