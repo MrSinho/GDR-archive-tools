@@ -56,6 +56,5 @@ build/*
 .vscode/*
 .vs/*
 gaia_csv/*
-gaia_bin/*
-
+gaia_bin/*.bin
 .release/*
