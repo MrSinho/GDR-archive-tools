@@ -1,4 +1,4 @@
-#include "gaia_archive_tools/gaiaArchiveTools.h"
+#include "gaia_archive_tools/gaia_archive_tools.h"
 
 #include <stdlib.h>
 #include <stdio.h>
