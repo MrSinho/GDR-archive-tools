@@ -37,11 +37,11 @@ The `csv` files will be found in `gaia_csv`.
 To export an entire csv file in a binary format (first argument is the source path, second argument is the destination path):
 ```bash
 cd bin
-./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.csv.bin
+./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin
 ```
 To export a certain number of celestial objects:
 ```bash
-./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.csv.bin 10 #export celestial objects from row 1 to 10
+./gaia_exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin 10 #export celestial objects from row 1 to 10
 ```
 
 ## [Data types and celestial objects size](https://gaia.aip.de/metadata/gaiaedr3/gaia_universe_model/)
