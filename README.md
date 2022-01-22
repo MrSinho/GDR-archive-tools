@@ -22,14 +22,17 @@ In 2022 the **`Gaia Data Release 3`** is going to be be available to the public.
 
 This unofficial repository collects the tools to pack the universe model csv files in a binary format. There is also a python scripts to download and unzip the resources. The original data can be found [here](http://cdn.gea.esac.esa.int/).
 
+## [Implementation of the Gaia Archive Tools](https://github.com/MrSinho/Gaia_Universe_Model)
+Coming soon...
+
 ## Download CSV files
 To download the **`Gaia EDR 3`** [csv files](http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/) run the `download_catalogues.py` script:
 ```bash
 cd scripts
 python -m pip install requests
-python download_catalogues.py #downloads and extracts all files
-python download_catalogues.py 0 #downloads and extracts GaiaUniverseModel_0000.csv.gz
-python download_catalogues.py 10 12 #downloads and extracts GaiaUniverseModel_0010.csv.gz, GaiaUniverseModel_0011.csv.gz, GaiaUniverseModel_0012.csv.gz
+python download_catalogues.py #download and extract all files
+python download_catalogues.py 0 #download and extracts GaiaUniverseModel_0000.csv.gz
+python download_catalogues.py 10 12 #download and extract GaiaUniverseModel_0010.csv.gz, GaiaUniverseModel_0011.csv.gz, GaiaUniverseModel_0012.csv.gz
 ```
 The `csv` files will be found in `gaia_csv`.
 
@@ -43,17 +46,21 @@ To export a certain number of celestial objects:
 ```bash
 ./gaia-exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin 10 #export celestial objects from row 1 to 10
 ```
+Using python:
+```bash
+cd scripts
+python convert_catalogues.py 10 12 #convert GaiaUniverseModel_0010.csv.gz, GaiaUniverseModel_0011.csv.gz, GaiaUniverseModel_0012.csv.gz
+```
 
 ## [Data types and celestial objects size](https://gaia.aip.de/metadata/gaiaedr3/gaia_universe_model/)
 The structure that handles the data of a celestial object has a total size of `186` bytes. The meaning of each variable and the full [documentation](https://www.cosmos.esa.int/web/gaia-users/archive/gedr3-documentation) of the Gaia Archive can be found by checking the [official web page](https://www.cosmos.esa.int/web/gaia/home).
 ```c
-//defined in GaiaArchiveTools/include/gaia_archive_tools/gaia_archive_tools.h
 typedef struct GaiaCelestialBody { 
     char        source_extended_id[20];
     uint64_t    source_id;
     uint64_t    solution_id;
-    double      ra;
-    double      dec;
+    gaia_real   ra;
+    gaia_real   dec;
     float       barycentric_distance;
     float       pmra;
     float       pmdec;
