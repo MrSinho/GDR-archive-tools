@@ -50,6 +50,10 @@
 
 #define GAIA_BODY_SIZE 186
 
+#ifdef _MSC_VER
+#pragma warning (disable: 4309)
+#endif//_MSC_VER
+
 typedef enum GaiaCelestialBodyFlags {
     GAIA_SOURCE_EXTENDED_ID = 0x00000000001,
     GAIA_SOURCE_ID = 0x00000000002,
