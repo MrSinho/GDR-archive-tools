@@ -95,12 +95,18 @@ typedef enum GaiaCelestialBodyFlags {
     GAIA_FULL_BODY              = UINT32_MAX
 }GaiaCelestialBodyFlags;
 
+#ifndef GAIA_DOUBLE_PRECISION
+typedef float gaia_real;
+#else
+typedef double gaia_real;
+#endif//GAIA_DOUBLE_PRECISION
+
 typedef struct GaiaCelestialBody {
     char        source_extended_id[20];
     uint64_t    source_id;
     uint64_t    solution_id;
-    double      ra;
-    double      dec;
+    gaia_real   ra;
+    gaia_real   dec;
     float       barycentric_distance;
     float       pmra;
     float       pmdec;
@@ -156,8 +162,6 @@ extern void gaiaWriteInt(const uint32_t val, uint32_t* p_offset, FILE* dst_strea
 
 extern void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
 
-extern void gaiaReadBinary(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t size, void* dst);
-
-extern void gaiaReadFullBinary(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t* size, void* dst);
+extern void gaiaReadBinary(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* dst);
 
 #endif//GAIA_ARCHIVE_TOOLS
