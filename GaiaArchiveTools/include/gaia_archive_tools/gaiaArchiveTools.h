@@ -51,48 +51,48 @@
 #define GAIA_BODY_SIZE 186
 
 typedef enum GaiaCelestialBodyFlags {
-    GAIA_SOURCE_EXTENDED_ID          = 0x00000001,
-    GAIA_SOURCE_ID                   = 0x00000002,
-    GAIA_SOLUTION_ID                 = 0x00000004,
-    GAIA_RA                          = 0x00000008,
-    GAIA_DEC                         = 0x00000010,
-    GAIA_BARYCENTRIC_DISTANCE        = 0x00000020,
-    GAIA_PMRA                        = 0x00000040,
-    GAIA_PMDEC                       = 0x00000080,
-    GAIA_RADIAL_VELOCITY             = 0x00000100,
-    GAIA_MAG_G                       = 0x00000200,
-    GAIA_MAG_BP                      = 0x00000400,
-    GAIA_MAG_RP                      = 0x00000800,
-    GAIA_MAG_RVS                     = 0x00001000,
-    GAIA_V_I                         = 0x00002000,
-    GAIA_MEAN_ABSOLUTE_V             = 0x00004000,
-    GAIA_AG                          = 0x00008000,
-    GAIA_AV                          = 0x00010000,
-    GAIA_TEFF                        = 0x02000000,
-    GAIA_SPECTRAL_TYPE               = 0x04000000,
-    GAIA_LOGG                        = 0x08000000,
-    GAIA_FEH                         = 0x00100000,
-    GAIA_ALPHAFE                     = 0x00080000,
-    GAIA_MBOL                        = 0x00200000,
-    GAIA_AGE                         = 0x00400000,
-    GAIA_MASS                        = 0x01000000,
-    GAIA_RADIUS                      = 0x00800000,
-    GAIA_VSINI                       = 0x00020000,
-    GAIA_POPULATION                  = 0x00040000,
-    GAIA_HAS_PHOTOCENTER_MOTION      = 0x00080000,
-    GAIA_NC                          = 0x00100000,
-    GAIA_NT                          = 0x00200000,
-    GAIA_SEMIMAJOR_AXIS              = 0x00400000,
-    GAIA_ECCENTRICITY                = 0x00800000,
-    GAIA_INCLINATION                 = 0x01000000,
-    GAIA_LONGITUDE_ASCENDING_NODE    = 0x02000000,
-    GAIA_ORBIT_PERIOD                = 0x04000000,
-    GAIA_PERIASTRON_DATE             = 0x08000000,
-    GAIA_PERIASTRON_ARGUMENT         = 0x10000000,
-    GAIA_VARIABILITY_AMPLITUDE       = 0x20000000,
-    GAIA_VARIABILITY_PERIOD          = 0x40000000,
-    GAIA_VARIABILITY_PHASE           = 0x80000000,
-    GAIA_FULL_BODY              = UINT32_MAX
+    GAIA_SOURCE_EXTENDED_ID = 0x00000000001,
+    GAIA_SOURCE_ID = 0x00000000002,
+    GAIA_SOLUTION_ID = 0x00000000004,
+    GAIA_RA = 0x00000000008,
+    GAIA_DEC = 0x00000000010,
+    GAIA_BARYCENTRIC_DISTANCE = 0x00000000020,
+    GAIA_PMRA = 0x00000000040,
+    GAIA_PMDEC = 0x00000000080,
+    GAIA_RADIAL_VELOCITY = 0x00000000100,
+    GAIA_MAG_G = 0x00000000200,
+    GAIA_MAG_BP = 0x00000000400,
+    GAIA_MAG_RP = 0x00000000800,
+    GAIA_MAG_RVS = 0x00000001000,
+    GAIA_V_I = 0x00000002000,
+    GAIA_MEAN_ABSOLUTE_V = 0x00000004000,
+    GAIA_AG = 0x00000008000,
+    GAIA_AV = 0x00000010000,
+    GAIA_TEFF = 0x00000020000,
+    GAIA_SPECTRAL_TYPE = 0x00000040000,
+    GAIA_LOGG = 0x00000080000,
+    GAIA_FEH = 0x00000100000,
+    GAIA_ALPHAFE = 0x00000200000,
+    GAIA_MBOL = 0x00000400000,
+    GAIA_AGE = 0x00000800000,
+    GAIA_MASS = 0x00001000000,
+    GAIA_RADIUS = 0x00002000000,
+    GAIA_VSINI = 0x00004000000,
+    GAIA_POPULATION = 0x00008000000,
+    GAIA_HAS_PHOTOCENTER_MOTION = 0x00010000000,
+    GAIA_NC = 0x00020000000,
+    GAIA_NT = 0x00040000000,
+    GAIA_SEMIMAJOR_AXIS = 0x00080000000,
+    GAIA_ECCENTRICITY = 0x00100000000,
+    GAIA_INCLINATION = 0x00200000000,
+    GAIA_LONGITUDE_ASCENDING_NODE = 0x00400000000,
+    GAIA_ORBIT_PERIOD = 0x00800000000,
+    GAIA_PERIASTRON_DATE = 0x01000000000,
+    GAIA_PERIASTRON_ARGUMENT = 0x02000000000,
+    GAIA_VARIABILITY_AMPLITUDE = 0x04000000000,
+    GAIA_VARIABILITY_PERIOD = 0x08000000000,
+    GAIA_VARIABILITY_PHASE = 0x10000000000,
+    GAIA_FULL_BODY = UINT32_MAX
 }GaiaCelestialBodyFlags;
 
 #ifndef GAIA_DOUBLE_PRECISION
@@ -147,17 +147,17 @@ typedef struct GaiaCelestialBody {
 typedef struct _iobuf FILE;
 
 extern void gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteLong(const uint64_t val, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteDouble(const double val, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteFloat(const float val, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteBoolean(const char* src, uint32_t* p_offset, FILE* dst_stream);
- 
+
 extern void gaiaWriteInt(const uint32_t val, uint32_t* p_offset, FILE* dst_stream);
 
 extern void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
