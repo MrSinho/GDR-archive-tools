@@ -51,10 +51,11 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+externals/*
 bin/*
 build/*
 .vscode/*
 .vs/*
 gaia_csv/*
-gaia_bin/*.bin
+gaia_bin/*
 .release/*
