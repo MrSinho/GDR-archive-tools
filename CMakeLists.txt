@@ -21,7 +21,7 @@ target_include_directories(GaiaArchiveTools PUBLIC
 target_link_libraries(GaiaArchiveTools PUBLIC libcurl)
 
 #archive converter executable
-add_executable(gaia-exp GaiaArchiveTools/src/main.c)
+add_executable(gaia-exp GaiaArchiveTools/src/gaia-exp.c)
 target_link_libraries(gaia-exp PUBLIC GaiaArchiveTools)
 
 #archive reader example
