@@ -1,3 +1,6 @@
 [submodule "csv-fast-reader"]
 	path = csv-fast-reader
 	url = https://github.com/jandoczy/csv-fast-reader
+[submodule "curl"]
+	path = curl
+	url = https://github.com/curl/curl
