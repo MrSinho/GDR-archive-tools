@@ -4,3 +4,9 @@
 [submodule "curl"]
 	path = externals/curl
 	url = https://github.com/curl/curl
+[submodule "externals/csv-fast-reader"]
+	path = externals/csv-fast-reader
+	url = https://github.com/jandoczy/csv-fast-reader
+[submodule "externals/curl"]
+	path = externals/curl
+	url = https://github.com/curl/curl
