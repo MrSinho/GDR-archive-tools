@@ -1,6 +1,0 @@
-[submodule "external/csv-fast-reader"]
-	path = external/csv-fast-reader
-	url = https://github.com/jandoczy/csv-fast-reader
-[submodule "external/curl"]
-	path = external/curl
-	url = https://github.com/curl/curl.git
