@@ -208,18 +208,26 @@ size_t gaiaWebWriteCallback(char* p_src, size_t n_items, size_t item_size, void*
 	return buffer_size;
 }
 
-void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* p_dst, const uint8_t debug) {
+gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
+	CURL* p_curl = curl_easy_init();
+	gaiaCheckCurlResult(
+		curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, gaiaWebWriteCallback),
+		"cannot set download callback function"
+	);
+	(debug) && (curl_easy_setopt(p_curl, CURLOPT_VERBOSE, 1L));
+	return (gaiaWebHandle)p_curl;
+}
+
+void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* p_dst) {
 	char src_address[256];
 	strcpy(src_address, "ftp://192.168.1.200/GaiaUniverseModel_");
 	strcat(src_address, src_id);
 	strcat(src_address, ".bin");
-	
-	CURL* p_curl = curl_easy_init();
 	gaiaCheckCurlResult(
 		curl_easy_setopt(p_curl, CURLOPT_URL, src_address),
 		"cannot set url option"
 	);
-
+	
 	curl_buffer_t buffer = { 0 };
 	const uint32_t BUFFER_MAX_SIZE = 165000000;
 	buffer.p_src = calloc(1, BUFFER_MAX_SIZE);
@@ -231,22 +239,9 @@ void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const u
 	);
 
 	gaiaCheckCurlResult(
-		curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, gaiaWebWriteCallback),
-		"cannot set download callback function"
-	);
-
-#ifndef NDEBUG
-	if (debug) {
-		curl_easy_setopt(p_curl, CURLOPT_VERBOSE, 1L);
-	}
-#endif//NDEBUG
-
-	gaiaCheckCurlResult(
 		curl_easy_perform(p_curl),
 		"cannot perform curl handle"
 	);
-
-	curl_easy_cleanup(p_curl);
 
 	uint32_t src_offset = offset;
 	for (uint32_t dst_offset = 0; dst_offset < size;) {
