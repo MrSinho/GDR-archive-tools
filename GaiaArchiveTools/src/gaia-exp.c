@@ -1,3 +1,7 @@
+#ifdef  __cplusplus
+extern "C" {
+#endif//__cplusplus
+
 #include "gaia_archive_tools/gaiaArchiveTools.h"
 
 #include <stdlib.h>
@@ -23,3 +27,7 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
+
+#ifdef  __cplusplus
+}
+#endif//__cplusplus

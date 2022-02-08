@@ -1,9 +1,9 @@
-#include "gaia_archive_tools/gaiaArchiveTools.h"
-#include "csv-fast-reader/csv.h"
-
 #ifdef  __cplusplus
 extern "C" {
 #endif//__cplusplus
+
+#include "gaia_archive_tools/gaiaArchiveTools.h"
+#include "csv-fast-reader/csv.h"
 
 #ifdef _MSC_VER
 #pragma warning (disable: 26451 4996)
