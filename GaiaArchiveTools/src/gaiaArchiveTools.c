@@ -229,7 +229,7 @@ void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBo
 	);
 	
 	curl_buffer_t buffer = { 0 };
-	const uint32_t BUFFER_MAX_SIZE = 165000000;
+	const uint32_t BUFFER_MAX_SIZE = 175000000;
 	buffer.p_src = calloc(1, BUFFER_MAX_SIZE);
 	assert(buffer.p_src != NULL);
 
@@ -326,6 +326,8 @@ void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBo
 		if (flags & GAIA_VARIABILITY_PHASE) { gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, buffer.p_src); }
 		src_offset += 4;
 	}
+
+	free(buffer.p_src);
 }
 
 void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count) {
