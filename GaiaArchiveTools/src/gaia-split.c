@@ -1,4 +1,4 @@
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif//__cplusplus
 
@@ -8,23 +8,17 @@ extern "C" {
 #include <stdio.h>
 
 int main(int argc, char** argv) {
+	
     if (argc == 3) {
-        gaiaConvertCSV(
+        gaiaSplit(
             argv[1],
-            argv[2],
-            UINT32_MAX
-        );
-    }
-    else if (argc == 4) {
-        gaiaConvertCSV(
-            argv[1],
-            argv[2],
-            (uint32_t)atoi(argv[3])
+            argv[2]
         );
     }
     else {
-        printf("gaia-exp error: wrong arguments\n");
+        printf("gaia-split error: wrong arguments\n");
     }
+
     return 0;
 }
 

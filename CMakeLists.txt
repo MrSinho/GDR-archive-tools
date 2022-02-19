@@ -18,11 +18,15 @@ target_include_directories(GaiaArchiveTools PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/externals
     ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl/include
 )
-target_link_libraries(GaiaArchiveTools PUBLIC libcurl)
+target_link_libraries(GaiaArchiveTools)
 
 #archive converter executable
 add_executable(gaia-exp GaiaArchiveTools/src/gaia-exp.c)
 target_link_libraries(gaia-exp PUBLIC GaiaArchiveTools)
+
+#archive split executable
+add_executable(gaia-split GaiaArchiveTools/src/gaia-split.c)
+target_link_libraries(gaia-split PUBLIC GaiaArchiveTools)
 
 #archive reader example
 add_executable(gaia_read_example gaia_read_example/src/main.c)
@@ -32,7 +36,7 @@ set_target_properties(gaia_read_example PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
 
-set_target_properties(GaiaArchiveTools gaia-exp libcurl PROPERTIES
+set_target_properties(GaiaArchiveTools gaia-exp gaia-split libcurl PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin

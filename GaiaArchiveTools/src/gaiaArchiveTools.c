@@ -8,7 +8,9 @@ extern "C" {
 #ifdef _MSC_VER
 #pragma warning (disable: 26451 4996)
 #endif//_MSC_VER
+#if 0
 #include <curl/curl.h>
+#endif//0
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -187,14 +189,14 @@ void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags
 
 	fclose(src_stream);
 }
-
+#if 0
 void gaiaCheckCurlResult(const CURLcode r, const char* msg) {
 #ifndef NDEBUG
 	(r != CURLE_OK) && printf("gaia archive tools error: curl failure, %s, %s\n", msg, curl_easy_strerror(r));
 #endif//NDEBUG
 	assert(r == CURLE_OK);
 }
-
+#endif//0
 typedef struct curl_buffer_t {
     char* p_src;
     size_t size;
@@ -207,7 +209,7 @@ size_t gaiaWebWriteCallback(char* p_src, size_t n_items, size_t item_size, void*
 	p_curl_buffer->size += buffer_size;
 	return buffer_size;
 }
-
+#if 0
 gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
 	CURL* p_curl = curl_easy_init();
 	gaiaCheckCurlResult(
@@ -217,18 +219,31 @@ gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
 	(debug) && (curl_easy_setopt(p_curl, CURLOPT_VERBOSE, 1L));
 	return (gaiaWebHandle)p_curl;
 }
+#endif 0
+void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint8_t debug, const uint32_t offset, const uint32_t size, uint32_t* p_bytes_read, void* p_dst) {
+	assert(p_bytes_read != NULL && p_dst != NULL);
+	
+	char cmd[256];
+	//strcpy(src_address, "ftp://192.168.1.200/GaiaUniverseModel_");
+	strcpy(cmd, "curl https://drive.google.com/drive/folders/1iwZs_ihLdO9hzZZWgsnDqSyRFH2nYIdO?usp=sharing/.gitignore");
+	strcat(cmd, src_id);
+	strcat(cmd, ".bin");
+	strcat(cmd, "-o tmp/Gaia_Universe_Model_tmp.bin");
 
-void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* p_dst) {
-	char src_address[256];
-	strcpy(src_address, "ftp://192.168.1.200/GaiaUniverseModel_");
-	strcat(src_address, src_id);
-	strcat(src_address, ".bin");
+	struct buffer_t {
+		void* p_src;
+	};
+
+	struct buffer_t buffer = { 0 };
+
+#if 0
 	gaiaCheckCurlResult(
 		curl_easy_setopt(p_curl, CURLOPT_URL, src_address),
 		"cannot set url option"
 	);
 	
 	curl_buffer_t buffer = { 0 };
+
 	const uint32_t BUFFER_MAX_SIZE = 175000000;
 	buffer.p_src = calloc(1, BUFFER_MAX_SIZE);
 	assert(buffer.p_src != NULL);
@@ -242,9 +257,42 @@ void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBo
 		curl_easy_perform(p_curl),
 		"cannot perform curl handle"
 	);
+#endif//0
+
+#ifdef _MSC_VER
+	FILE* fp = _popen(cmd, "r");
+#else
+	FILE* fp = popen(script, "r");
+#endif // _MSC_VER
+	assert(fp != NULL);
+	if (debug) {
+		char output[1024];
+		while (fgets(output, sizeof(output), fp) != NULL) {
+			printf("%s", output);
+		}
+	}	
+#ifdef _MSC_VER
+	assert(_pclose(fp) != 0);
+#else 
+	assert(pclose(fp) != 0);
+#endif // _MSC_VER
+
+
+	FILE* src_stream = fopen("tmp/Gaia_Universe_Model_tmp.bin", "rb");
+	fseek(src_stream, 0, SEEK_END);
+	uint32_t stream_size = ftell(src_stream);
+	fseek(src_stream, 0, SEEK_SET);
+
+	buffer.p_src = calloc(1, stream_size);
+	assert(buffer.p_src != NULL);
+
+	fread(buffer.p_src, 1, stream_size, src_stream);
+
+	*p_bytes_read = stream_size;
+	(size != 0) && (*p_bytes_read = size);
 
 	uint32_t src_offset = offset;
-	for (uint32_t dst_offset = 0; dst_offset < size;) {
+	for (uint32_t dst_offset = 0; dst_offset < *p_bytes_read;) {
 		if (flags & GAIA_SOURCE_EXTENDED_ID) { gaiaReadBuffer((void*)(&((char*)p_dst)[dst_offset]), 20, src_offset, &dst_offset, buffer.p_src); }
 		src_offset += 20;
 		if (flags & GAIA_SOURCE_ID) { gaiaReadLong((uint64_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, buffer.p_src); }
@@ -325,8 +373,10 @@ void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBo
 		src_offset += 4;
 		if (flags & GAIA_VARIABILITY_PHASE) { gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, buffer.p_src); }
 		src_offset += 4;
+
 	}
 
+	fclose(src_stream);
 	free(buffer.p_src);
 }
 
@@ -433,6 +483,50 @@ void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t b
 		fflush(dst_stream);
 	}
 	fclose(dst_stream);
+}
+
+void gaiaSplit(const char* src_dir, const char* src_id) {
+	assert(src_dir != NULL && src_id != NULL);
+
+	char dst_0_path[256]; char dst_1_path[256];
+	
+	char src_path[256];
+	strcpy(src_path, src_dir);
+	strcat(src_path, "/GaiaUniverseModel_");
+	strcat(src_path, src_id);
+
+	strcpy(dst_0_path, src_path);
+	strcpy(dst_1_path, src_path);
+
+	strcat(src_path, ".bin");
+
+	strcat(dst_0_path, ".0.bin");
+	strcat(dst_1_path, ".1.bin");
+
+	FILE* src_stream = fopen(src_path, "rb");
+	
+	fseek(src_stream, 0, SEEK_END);
+	uint32_t dst_size = (uint32_t)ftell(src_stream) / (uint32_t)2;
+	fseek(src_stream, 0, SEEK_SET);
+
+	FILE* dst_0_stream = fopen(dst_0_path, "wb");
+	FILE* dst_1_stream = fopen(dst_1_path, "wb");
+	void* dst_0_buffer = calloc(1, dst_size);
+	void* dst_1_buffer = calloc(1, dst_size);
+	assert(dst_0_buffer != NULL && dst_1_buffer != NULL);
+
+	fread(dst_0_buffer, 1, dst_size, src_stream);
+	fseek(src_stream, dst_size, SEEK_SET);
+	fread(dst_1_buffer, 1, dst_size, src_stream);
+
+	fwrite(dst_0_buffer, 1, dst_size, dst_0_stream);
+	fwrite(dst_1_buffer, 1, dst_size, dst_1_stream);
+	
+	free(dst_0_buffer);
+	free(dst_1_buffer);
+	fclose(src_stream);
+	fclose(dst_0_stream);
+	fclose(dst_1_stream);
 }
 
 #ifdef  __cplusplus

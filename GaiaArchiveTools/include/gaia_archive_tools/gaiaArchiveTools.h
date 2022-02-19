@@ -214,14 +214,18 @@ extern void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlag
 
 #include <curl/curl.h>
 
+
+#if 0
 typedef struct CURL* gaiaWebHandle;
 
 extern gaiaWebHandle gaiaWebSetup(const uint8_t debug);
 
 #define gaiaWebShutdown(gaia_web_handle)\
     curl_easy_cleanup((CURL*)gaia_web_handle)
+#endif//0
+extern void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint8_t debug, const uint32_t offset, const uint32_t size, uint32_t* p_bytes_read, void* p_dst);
 
-extern void gaiaReadWeb(gaiaWebHandle p_curl, const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* p_dst);
+extern void gaiaSplit(const char* src_dir, const char* src_id);
 
 #ifdef  __cplusplus
 }

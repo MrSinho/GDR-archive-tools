@@ -8,10 +8,10 @@ extern "C" {
 
 int main(void) {
 
-	gaiaWebHandle gaia = gaiaWebSetup(1);
+	uint32_t read_data = 0;
 
 	float values[4];
-	gaiaReadWeb(gaia, "4001", GAIA_RA | GAIA_DEC, 0, 16, values);
+	gaiaReadWeb("0000", GAIA_RA | GAIA_DEC, 1, 0, 16, &read_data, values); //if offset is set to 0, the entire file will be read. 
 	
 	printf("\n\tREAD VALUES:\n\n");
 
@@ -20,8 +20,6 @@ int main(void) {
 	
 	printf("right ascension %f\n", values[2]);
 	printf("declination %f\n\n", values[3]);
-
-	gaiaWebShutdown(gaia);
 
 	return 0;
 }
