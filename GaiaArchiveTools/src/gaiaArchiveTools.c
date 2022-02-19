@@ -18,6 +18,51 @@ extern "C" {
 #include <string.h>
 #include <assert.h>
 
+uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
+	uint32_t src_size = 0;
+	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += 20; }
+	if (flags & GAIA_SOURCE_ID) { src_size += 8; }
+	if (flags & GAIA_SOLUTION_ID) { src_size += 8; }
+	if (flags & GAIA_RA) { src_size += 8; }
+	if (flags & GAIA_DEC) { src_size += 8; }
+	if (flags & GAIA_BARYCENTRIC_DISTANCE) { src_size += 4; }
+	if (flags & GAIA_PMRA) { src_size += 4; }
+	if (flags & GAIA_PMDEC) { src_size += 4; }
+	if (flags & GAIA_RADIAL_VELOCITY) { src_size += 4; }
+	if (flags & GAIA_MAG_G) { src_size += 4; }
+	if (flags & GAIA_MAG_BP) { src_size += 4; }
+	if (flags & GAIA_MAG_RP) { src_size += 4; }
+	if (flags & GAIA_MAG_RVS) { src_size += 4; }
+	if (flags & GAIA_V_I) { src_size += 4; }
+	if (flags & GAIA_MEAN_ABSOLUTE_V) { src_size += 4; }
+	if (flags & GAIA_AG) { src_size += 4; }
+	if (flags & GAIA_AV) { src_size += 4; }
+	if (flags & GAIA_TEFF) { src_size += 4; }
+	if (flags & GAIA_LOGG) { src_size += 4; }
+	if (flags & GAIA_FEH) { src_size += 4; }
+	if (flags & GAIA_ALPHAFE) { src_size += 4; }
+	if (flags & GAIA_MBOL) { src_size += 4; }
+	if (flags & GAIA_AGE) { src_size += 4; }
+	if (flags & GAIA_MASS) { src_size += 4; }
+	if (flags & GAIA_RADIUS) { src_size += 4; }
+	if (flags & GAIA_VSINI) { src_size += 4; }
+	if (flags & GAIA_POPULATION) { src_size += 1; }
+	if (flags & GAIA_HAS_PHOTOCENTER_MOTION) { src_size += 1; }
+	if (flags & GAIA_NC) { src_size += 4; }
+	if (flags & GAIA_NT) { src_size += 4; }
+	if (flags & GAIA_SEMIMAJOR_AXIS) { src_size += 4; }
+	if (flags & GAIA_ECCENTRICITY) { src_size += 4; }
+	if (flags & GAIA_INCLINATION) { src_size += 4; }
+	if (flags & GAIA_LONGITUDE_ASCENDING_NODE) { src_size += 4; }
+	if (flags & GAIA_ORBIT_PERIOD) { src_size += 4; }
+	if (flags & GAIA_PERIASTRON_DATE) { src_size += 4; }
+	if (flags & GAIA_PERIASTRON_ARGUMENT) { src_size += 4; }
+	if (flags & GAIA_VARIABILITY_AMPLITUDE) { src_size += 4; }
+	if (flags & GAIA_VARIABILITY_PERIOD) { src_size += 4; }
+	if (flags & GAIA_VARIABILITY_PHASE) { src_size += 4; }
+	return src_size;
+}
+
 void gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream) {
 	uint8_t _val = val;
 	fwrite(&_val, 1, 1, dst_stream);
@@ -274,8 +319,8 @@ void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const u
 
 		fread(buffer.p_src, 1, stream_size, src_stream);
 
-		*p_bytes_read = stream_size;
-		(size != 0 && size < stream_size) && (*p_bytes_read = size);
+		*p_bytes_read = stream_size / (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE * gaiaGetBodySize(flags);
+		(size != 0) && (*p_bytes_read = size);
 
 		uint32_t src_offset = offset;
 		while (dst_offset < *p_bytes_read) {

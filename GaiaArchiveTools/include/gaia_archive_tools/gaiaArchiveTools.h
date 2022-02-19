@@ -154,6 +154,8 @@ typedef struct GaiaCelestialBody {
 
 #define GAIA_CELESTIAL_BODY_MAX_SIZE 186
 
+extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
+
 typedef struct _iobuf FILE;
 
 extern void gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream);
