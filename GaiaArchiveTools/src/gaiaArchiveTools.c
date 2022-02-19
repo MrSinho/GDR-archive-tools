@@ -275,7 +275,7 @@ void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const u
 		fread(buffer.p_src, 1, stream_size, src_stream);
 
 		*p_bytes_read = stream_size;
-		(size != 0) && (*p_bytes_read = size);
+		(size != 0 && size < stream_size) && (*p_bytes_read = size);
 
 		uint32_t src_offset = offset;
 		while (dst_offset < *p_bytes_read) {
