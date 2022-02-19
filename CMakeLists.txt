@@ -6,8 +6,6 @@ project(Gaia_Archive_Tools C)
 
 set(CSV_PARSER_DIR externals/csv-fast-reader)
 
-add_subdirectory(externals/curl)
-
 #archive tools library
 add_library(GaiaArchiveTools STATIC 
     GaiaArchiveTools/src/gaiaArchiveTools.c
@@ -16,7 +14,6 @@ add_library(GaiaArchiveTools STATIC
 target_include_directories(GaiaArchiveTools PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/GaiaArchiveTools/include
     ${CMAKE_CURRENT_SOURCE_DIR}/externals
-    ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl/include
 )
 target_link_libraries(GaiaArchiveTools)
 
@@ -36,7 +33,7 @@ set_target_properties(gaia_read_example PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
 
-set_target_properties(GaiaArchiveTools gaia-exp gaia-split libcurl PROPERTIES
+set_target_properties(GaiaArchiveTools gaia-exp gaia-split PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin

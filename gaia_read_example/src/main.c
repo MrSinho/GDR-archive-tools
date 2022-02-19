@@ -11,7 +11,7 @@ int main(void) {
 	uint32_t read_data = 0;
 
 	float values[4];
-	gaiaReadWeb("0000", GAIA_RA | GAIA_DEC, 1, 0, 16, &read_data, values); //if offset is set to 0, the entire file will be read. 
+	gaiaReadWeb("0051", GAIA_RA | GAIA_DEC, 0, 16, &read_data, values); //if offset is set to 0, the entire file will be read. 
 	
 	printf("\n\tREAD VALUES:\n\n");
 
