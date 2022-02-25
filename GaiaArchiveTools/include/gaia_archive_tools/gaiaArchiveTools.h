@@ -193,6 +193,8 @@ extern void gaiaStreamReadReal(gaia_real* p_val, const uint32_t src_offset, uint
 
 extern void gaiaReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src);
 
+extern void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, void* p_dst);
+
 #define gaiaReadByte(p_val, src_offset, p_dst_offset, p_src)\
 	gaiaReadBuffer((void*)(p_val), 1, src_offset, p_dst_offset, p_src)
 
@@ -212,7 +214,7 @@ extern void gaiaReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* 
 
 extern void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
 
-extern void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, void* p_dst);
+extern void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
 #if 0
 #include <curl/curl.h>
@@ -223,9 +225,12 @@ extern gaiaWebHandle gaiaWebSetup(const uint8_t debug);
 #define gaiaWebShutdown(gaia_web_handle)\
     curl_easy_cleanup((CURL*)gaia_web_handle)
 #endif//0
-extern void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_bytes_read, void* p_dst);
+extern void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
 extern void gaiaSplit(const char* src_dir, const char* src_id);
+
+#define gaiaFree(p_buffer)\
+    free(p_buffer)
 
 #ifdef  __cplusplus
 }

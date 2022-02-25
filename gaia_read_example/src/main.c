@@ -11,16 +11,18 @@ int main(void) {
 
 	uint32_t read_data = 0;
 
-	float values[4];
-	gaiaReadWeb("0051", GAIA_RA | GAIA_DEC, 0, 16, &read_data, values); //if offset is set to 0, the entire file will be read. 
+	float* values;
+	gaiaReadWeb("0001.0", GAIA_RA | GAIA_DEC, 0, 0, &read_data, &values); //if size is set to 0, the entire file will be read. 
 	
-	printf("\n\tREAD VALUES:\n\n");
+	printf("\n\tREAD %i BYTES:\n\n", read_data);
 
 	printf("right ascension %f\n", values[0]);
 	printf("declination %f\n\n", values[1]);
 	
 	printf("right ascension %f\n", values[2]);
 	printf("declination %f\n\n", values[3]);
+
+	gaiaFree(values);
 
 	return 0;
 }
