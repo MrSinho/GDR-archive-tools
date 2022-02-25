@@ -18,6 +18,25 @@ extern "C" {
 #include <string.h>
 #include <assert.h>
 
+void gaiaUniverseModelGetId(const uint32_t id, const uint8_t half, char* s_dst) {
+	assert(s_dst != NULL);
+	strcpy(s_dst, "0000.0");
+	if (id >= 1000) {
+		itoa(id, s_dst, 10);
+	}
+	else if (100 <= id && id < 1000) {
+		itoa(id, &s_dst[1], 10);
+	}
+	else if (10 <= id && id < 100) {
+		itoa(id, &s_dst[2], 10);
+	}
+	else if (id < 10) {
+		itoa(id, &s_dst[3], 10);
+	}
+	s_dst[4] = '.';
+	itoa(half, &s_dst[5], 10);
+}
+
 uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	uint32_t src_size = 0;
 	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += 20; }
