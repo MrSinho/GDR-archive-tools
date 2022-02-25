@@ -195,7 +195,7 @@ extern void gaiaStreamReadReal(gaia_real* p_val, const uint32_t src_offset, uint
 
 extern void gaiaReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src);
 
-extern void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, void* p_dst);
+extern void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, const uint32_t dst_size, void* p_dst);
 
 #define gaiaReadByte(p_val, src_offset, p_dst_offset, p_src)\
 	gaiaReadBuffer((void*)(p_val), 1, src_offset, p_dst_offset, p_src)
