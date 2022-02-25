@@ -183,7 +183,7 @@ void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags
 	*pp_dst = calloc(1, *p_dst_size);
 	assert(pp_dst);
 
-	gaiaExtractBuffer(p_src, src_size, offset, flags, *pp_dst);
+	gaiaExtractBuffer(p_src, src_size, offset, flags, *p_dst_size, *pp_dst);
 
 	fclose(src_stream);
 	free(p_src);
@@ -218,7 +218,7 @@ gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
 }
 #endif 0
 
-void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, void* p_dst) {
+void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, const uint32_t dst_size, void* p_dst) {
 	assert(p_src != NULL && p_dst != NULL);
 
 	uint32_t src_offset = offset;
@@ -305,6 +305,7 @@ void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32
 		src_offset += 4;
 		if (flags & GAIA_VARIABILITY_PHASE) { gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); }
 		src_offset += 4;
+		if (dst_offset >= dst_size) { break; }
 	}
 }
 
