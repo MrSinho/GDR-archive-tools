@@ -12,10 +12,10 @@ int main(void) {
 	uint32_t read_data = 0;
 	
 	char src_id[6];
-	gaiaUniverseModelGetId(1, 0, src_id); //"0001.0"
+	gaiaUniverseModelGetId(25, 0, src_id); //"0025.0"
 
 	float* values;
-	gaiaReadWeb(src_id, GAIA_RA | GAIA_DEC, 0, 0, &read_data, &values); //if size is set to 0, the entire file will be read. 
+	gaiaReadWeb(src_id, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); //if size is set to 0, the entire file will be read. 
 	
 	printf("\n\tREAD %i BYTES:\n\n", read_data);
 
