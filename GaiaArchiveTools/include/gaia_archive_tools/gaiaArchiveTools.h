@@ -154,7 +154,7 @@ typedef struct GaiaCelestialBody {
 
 #define GAIA_CELESTIAL_BODY_MAX_SIZE 186
 
-extern void gaiaUniverseModelGetId(const uint32_t id, const uint8_t half, char* s_dst);
+extern void gaiaUniverseModelGetId(const uint32_t id, char* s_dst);
 
 extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
 
@@ -228,9 +228,9 @@ extern gaiaWebHandle gaiaWebSetup(const uint8_t debug);
     curl_easy_cleanup((CURL*)gaia_web_handle)
 #endif//0
 extern void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
-
+#if 0
 extern void gaiaSplit(const char* src_dir, const char* src_id);
-
+#endif//0
 #define gaiaFree(p_buffer)\
     free(p_buffer)
 

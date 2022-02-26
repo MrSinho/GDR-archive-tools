@@ -18,9 +18,9 @@ extern "C" {
 #include <string.h>
 #include <assert.h>
 
-void gaiaUniverseModelGetId(const uint32_t id, const uint8_t half, char* s_dst) {
+void gaiaUniverseModelGetId(const uint32_t id, char* s_dst) {
 	assert(s_dst != NULL);
-	strcpy(s_dst, "0000.0");
+	strcpy(s_dst, "0000");
 	if (id >= 1000) {
 		itoa(id, s_dst, 10);
 	}
@@ -33,12 +33,11 @@ void gaiaUniverseModelGetId(const uint32_t id, const uint8_t half, char* s_dst) 
 	else if (id < 10) {
 		itoa(id, &s_dst[3], 10);
 	}
-	s_dst[4] = '.';
-	itoa(half, &s_dst[5], 10);
 }
 
 uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	uint32_t src_size = 0;
+	if (flags == GAIA_FULL_BODY) { return GAIA_BODY_SIZE; }
 	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += 20; }
 	if (flags & GAIA_SOURCE_ID) { src_size += 8; }
 	if (flags & GAIA_SOLUTION_ID) { src_size += 8; }
@@ -429,6 +428,7 @@ void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t b
 	fclose(dst_stream);
 }
 
+#if 0
 void gaiaSplit(const char* src_dir, const char* src_id) {
 	assert(src_dir != NULL && src_id != NULL);
 
@@ -457,7 +457,7 @@ void gaiaSplit(const char* src_dir, const char* src_id) {
 			dst_size_0 = (dst_size - 1) / 2 * (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE;
 			dst_size_1 = (dst_size + 1) / 2 * (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE;
 		}
-		else {
+		else if (dst_size % 2 == 0) {
 			dst_size_0 = dst_size / 2 * (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE;
 			dst_size_1 = dst_size / 2 * (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE;
 		}
@@ -484,7 +484,7 @@ void gaiaSplit(const char* src_dir, const char* src_id) {
 	fclose(dst_0_stream);
 	fclose(dst_1_stream);
 }
-
+#endif//0
 #ifdef  __cplusplus
 }
 #endif//__cplusplus
