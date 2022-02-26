@@ -8,8 +8,6 @@
 
 *Gaia will create an extraordinarily precise three-dimensional map of more than a thousand million stars throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature and composition. This huge stellar census will provide the data needed to tackle an enormous range of important questions related to the origin, structure and evolutionary history of our galaxy.*
 
-Thanks to a billion pixel camera and after more than 7 years in space, the Gaia project has given us many details about the Universe, thanks to **`Gaia Data Release 1`**, **`Gaia Data Release 2`** and **`Gaia Early Data Release 3`**. 
-
 In 2022 the **`Gaia Data Release 3`** is going to be be available to the public.
 
 ## [Gaia License](https://www.cosmos.esa.int/web/gaia-users/license)
