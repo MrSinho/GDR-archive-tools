@@ -218,6 +218,8 @@ extern void gaiaConvertCSV(const char* src_path, const char* dst_path, const uin
 
 extern void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
+extern void gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
+
 #if 0
 #include <curl/curl.h>
 typedef struct CURL* gaiaWebHandle;

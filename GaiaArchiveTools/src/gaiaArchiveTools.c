@@ -187,6 +187,20 @@ void gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags
 	fclose(src_stream);
 	free(p_src);
 }
+
+void gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
+	assert(src_dir != NULL && p_dst_size != NULL && pp_dst != NULL);
+
+	char s_src_id[5] = "0000";
+	gaiaUniverseModelGetId(src_id, s_src_id);
+	char src_path[512];
+	strcpy(src_path, src_dir);
+	strcat(src_path, "/GaiaUniverseModel_");
+	strcat(src_path, s_src_id);
+	strcat(src_path, ".bin");
+	gaiaReadBinaryFile(src_path, flags, offset, size, p_dst_size, pp_dst);
+}
+
 #if 0
 void gaiaCheckCurlResult(const CURLcode r, const char* msg) {
 #ifndef NDEBUG

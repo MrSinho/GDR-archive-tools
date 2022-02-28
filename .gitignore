@@ -51,6 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+gaia_resources/*
 bin/*
 build/*
 .vscode/*
