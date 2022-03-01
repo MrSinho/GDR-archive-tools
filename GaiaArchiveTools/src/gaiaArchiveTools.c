@@ -41,8 +41,8 @@ uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += 20; }
 	if (flags & GAIA_SOURCE_ID) { src_size += 8; }
 	if (flags & GAIA_SOLUTION_ID) { src_size += 8; }
-	if (flags & GAIA_RA) { src_size += 8; }
-	if (flags & GAIA_DEC) { src_size += 8; }
+	if (flags & GAIA_RA) { src_size += sizeof(gaia_real); }
+	if (flags & GAIA_DEC) { src_size += sizeof(gaia_real); }
 	if (flags & GAIA_BARYCENTRIC_DISTANCE) { src_size += 4; }
 	if (flags & GAIA_PMRA) { src_size += 4; }
 	if (flags & GAIA_PMDEC) { src_size += 4; }
