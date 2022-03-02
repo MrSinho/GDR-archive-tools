@@ -2,7 +2,7 @@
 extern "C" {
 #endif//__cplusplus
 
-#include "gaia_archive_tools/gaiaArchiveTools.h"
+#include "gaia-archive-tools/gaiaArchiveTools.h"
 #include "csv-fast-reader/csv.h"
 
 #ifdef _MSC_VER
