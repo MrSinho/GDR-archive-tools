@@ -4,95 +4,119 @@
   <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
 </p>
 
-## [About the mission](https://www.esa.int/Science-exploration/Space_Science/Gaia)
+Documentation at https://mrsinho.github.io/docs/Gaia_Archive_Tools/index.html
 
-*Gaia will create an extraordinarily precise three-dimensional map of more than a thousand million stars throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature and composition. This huge stellar census will provide the data needed to tackle an enormous range of important questions related to the origin, structure and evolutionary history of our galaxy.*
+Setup
+* [Clone and build](#clone-and-build)
+* [Download Universe Model Data](#download-universe-model-data)
 
-In 2022 the **`Gaia Data Release 3`** is going to be be available to the public.
+Tutorial
+* [Use CMake](#use-cmake)
+* [Example](#example)
+* [Gaia Universe Model Repository as Reference](#gaia-universe-model-repository-as-reference)
+* [Useful Python Scripts](#useful-python-scripts)
 
-## [Gaia License](https://www.cosmos.esa.int/web/gaia-users/license)
+---
 
-*Use of the Gaia data comes with the following license:*
+# Setup
 
-*"The Gaia data are open and free to use, provided credit is given to 'ESA/Gaia/DPAC'. In general, access to, and use of, ESA's Gaia Archive (hereafter called 'the website') constitutes acceptance of the following general terms and conditions. Neither ESA nor any other party involved in creating, producing, or delivering the website shall be liable for any direct, incidental, consequential, indirect, or punitive damages arising out of user access to, or use of, the website. The website does not guarantee the accuracy of information provided by external sources and accepts no responsibility or liability for any consequences arising from the use of such data."*
+## Clone and Build
 
-## About this repository
-
-This unofficial repository collects the tools to pack the universe model csv files in a binary format. There is also a python scripts to download and unzip the resources. The original data can be found [here](http://cdn.gea.esac.esa.int/).
-
-## [Implementation of the Gaia Archive Tools](https://github.com/MrSinho/Gaia_Universe_Model)
-Coming soon...
-
-## Download CSV files
-To download the **`Gaia EDR 3`** [csv files](http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/) run the `download_catalogues.py` script:
+Open the terminal and run the following commands:
 ```bash
-cd scripts
-python -m pip install requests
-python download_catalogues.py #download and extract all files
-python download_catalogues.py 0 #download and extracts GaiaUniverseModel_0000.csv.gz
-python download_catalogues.py 10 12 #download and extract GaiaUniverseModel_0010.csv.gz, GaiaUniverseModel_0011.csv.gz, GaiaUniverseModel_0012.csv.gz
-```
-The `csv` files will be found in `gaia_csv`.
-
-## Usage of the archive converter:
-To export an entire csv file in a binary format (first argument is the source path, second argument is the destination path):
-```bash
-cd bin
-./gaia-exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin
-```
-To export a certain number of celestial objects:
-```bash
-./gaia-exp ../gaia_csv/GaiaUniverseModel_0000.csv ../gaia_bin/GaiaUniverseModel_0000.bin 10 #export celestial objects from row 1 to 10
-```
-Using python:
-```bash
-cd scripts
-python convert_catalogues.py 10 12 #convert GaiaUniverseModel_0010.csv.gz, GaiaUniverseModel_0011.csv.gz, GaiaUniverseModel_0012.csv.gz
+git clone --recursive https://github.com/MrSinho/Gaia_Archive_Tools.git
+cd Gaia_Archive_Tools
+mkdir build
+cd build
+cmake ..
+cmake --build .
 ```
 
-## [Data types and celestial objects size](https://gaia.aip.de/metadata/gaiaedr3/gaia_universe_model/)
-The structure that handles the data of a celestial object has a total size of `186` bytes. The meaning of each variable and the full [documentation](https://www.cosmos.esa.int/web/gaia-users/archive/gedr3-documentation) of the Gaia Archive can be found by checking the [official web page](https://www.cosmos.esa.int/web/gaia/home).
+## Download Universe Model Data
+
+Inside the cloned repository directory download the GEDR3 binaries by executing one of the scripts shown below: 
+```bash
+#For Linux devices
+./download_resources.sh
+#For Windows devices
+./download_resources.bat
+```
+
+# Tutorial
+
+## Use CMake
+
+| CMake target                                           | type       |
+|--------------------------------------------------------|------------|
+| [gaia-archive-tools](../Gaia_Archive_Tools/index.md)   | library    |
+
+## Example
 ```c
-typedef struct GaiaCelestialBody { 
-    char        source_extended_id[20];
-    uint64_t    source_id;
-    uint64_t    solution_id;
-    gaia_real   ra;
-    gaia_real   dec;
-    float       barycentric_distance;
-    float       pmra;
-    float       pmdec;
-    float       radial_velocity;
-    float       mag_g;
-    float       mag_bp;
-    float       mag_rp;
-    float       mag_rvs;
-    float       v_i;
-    float       mean_absolute_v;
-    float       ag;
-    float       av;
-    float       teff;
-    float       logg;
-    float       feh;
-    float       alphafe;
-    float       mbol;
-    float       age;
-    float       mass;
-    float       radius;
-    float       vsini;
-    uint8_t     population;
-    uint8_t     has_photocenter_motion;
-    uint32_t    nc;
-    uint32_t    nt;
-    float       semimajor_axis;
-    float       eccentricity;
-    float       inclination;
-    float       longitude_ascending_node;
-    float       orbit_period;
-    float       periastron_date;
-    float       periastron_argument;
-    float       variability_amplitude;
-    float       variability_period;
-    float       variability_phase;
-} GaiaCelestialBody;
+//Located at "repo-dir/gaia_read_example/src/main.c"
+#include <gaia-archive-tools/gaiaArchiveTools.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+
+	float* values;
+	uint32_t read_data = 0;
+
+    //Downloads the file and reads the data
+    //if size is set to 0, the entire file will be read.
+    //char src_id[5];
+    //gaiaUniverseModelGetId(25, src_id); //"0025"
+    //gaiaReadWeb(src_id, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); 
+
+    //If you have already downloaded the binaries:
+    //Reads ../gaia_resources/GaiaUniverseModel_0003.bin
+    gaiaReadBinaryFileFromID("../gaia_resources", 3, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); 
+
+	printf("\n\tREAD %i BYTES:\n\n", read_data);
+
+	printf("right ascension %f\n", values[0]);
+	printf("declination %f\n\n", values[1]);
+	
+	printf("right ascension %f\n", values[2]);
+	printf("declination %f\n\n", values[3]);
+
+	gaiaFree(values);
+	return 0;
+}
+```
+
+## Gaia Universe Model repository as reference
+
+The [Gaia_Universe_Model](../Gaia_Universe_Model/index.md) repository uses this library and the [SH-Engine](../SH-Engine/index.md) to render in a 3d environment millions of celestial bodies in real time. The program uses all the functionalities of this library.
+
+## Useful Python Scripts
+
+If you navigate in the scripts folder you'll find some python scripts:
+```batch
+ Directory: C:\GitHub\Gaia_Archive_Tools\scripts
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        26/01/2022     20:26           1116 compress_catalogues.py
+-a----        22/01/2022     21:53           1127 convert_catalogues.py
+-a----        13/01/2022     17:37           1485 download_catalogues.py
+-a----        15/01/2022     22:49              8 requirements.txt
+```
+To download the original CSV files directly from the Gaia Servers:
+```bash 
+python download_catalogues.py 0 #Download only file 0
+python download_catalogues.py 0 4999 #Download all the files in the given range
+```
+
+If you want to convert the CSV files in a binary format, do:
+```bash
+python convert_catalogues.py 0 #Convert only file 0 
+python convert_catalogues.py 0 4999 #Convert all the files in the given range 
+```
+
+In case you need to compress the binaries in a RAR file:
+```bash
+python compress_catalogues.py 0 #Compress only file 0 
+python compress_catalogues.py 0 4999 #Compress all the files in the given range 
 ```

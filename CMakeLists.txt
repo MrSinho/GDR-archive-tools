@@ -22,9 +22,9 @@ target_link_libraries(gaia-exp PUBLIC gaia-archive-tools)
 
 
 #archive reader example
-add_executable(gaia_read_example gaia_read_example/src/main.c)
-target_link_libraries(gaia_read_example PUBLIC gaia-archive-tools)
-set_target_properties(gaia_read_example PROPERTIES
+add_executable(gaia-read-example gaia-read-example/src/main.c)
+target_link_libraries(gaia-read-example PUBLIC gaia-archive-tools)
+set_target_properties(gaia-read-example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
