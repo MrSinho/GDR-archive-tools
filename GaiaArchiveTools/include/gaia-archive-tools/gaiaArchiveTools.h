@@ -158,7 +158,7 @@ extern void gaiaUniverseModelGetId(const uint32_t id, char* s_dst);
 
 extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
 
-typedef struct _iobuf FILE;
+#include <stdio.h>
 
 extern void gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream);
 
