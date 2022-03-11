@@ -22,7 +22,14 @@ int main(void) {
 	
 
     //If you have already downloaded the binaries:
-	gaiaReadBinaryFileFromID("../gaia_resources", 0, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); //Reads ../gaia_resources/GaiaUniverseModel_0000.bin
+	gaiaReadBinaryFileFromID(
+		"../gaia_resources", 
+		(uint32_t)0, 
+		GAIA_RA | GAIA_DEC, 
+		(uint32_t)0, 
+		(uint32_t)16, //if size is set to 0, the entire file will be read.
+		&read_data, 
+		(void**)&values); //Reads ../gaia_resources/GaiaUniverseModel_0000.bin
 
 	printf("\n\tREAD %i BYTES:\n\n", read_data);
 
