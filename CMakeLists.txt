@@ -9,7 +9,7 @@ set(CSV_PARSER_DIR externals/csv-fast-reader)
 #archive tools library
 add_library(gaia-archive-tools STATIC 
     GaiaArchiveTools/src/gaiaArchiveTools.c
-    ${CSV_PARSER_DIR}/csv.c
+    #${CSV_PARSER_DIR}/csv.c
 )
 target_include_directories(gaia-archive-tools PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/GaiaArchiveTools/include
@@ -17,8 +17,8 @@ target_include_directories(gaia-archive-tools PUBLIC
 )
 
 #archive converter executable
-add_executable(gaia-exp GaiaArchiveTools/src/gaia-exp.c)
-target_link_libraries(gaia-exp PUBLIC gaia-archive-tools)
+#add_executable(gaia-exp GaiaArchiveTools/src/gaia-exp.c)
+#target_link_libraries(gaia-exp PUBLIC gaia-archive-tools)
 
 
 #archive reader example
@@ -29,7 +29,7 @@ set_target_properties(gaia-read-example PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
 
-set_target_properties(gaia-archive-tools gaia-exp PROPERTIES
+set_target_properties(gaia-archive-tools gaia-read-example PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
