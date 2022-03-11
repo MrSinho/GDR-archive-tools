@@ -3,7 +3,10 @@ extern "C" {
 #endif//__cplusplus
 
 #include "gaia-archive-tools/gaiaArchiveTools.h"
+
+#if 0
 #include "csv-fast-reader/csv.h"
+#endif//0
 
 #ifdef _MSC_VER
 #pragma warning (disable: 26451 4996 6386)
@@ -229,7 +232,7 @@ gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
 	(debug) && (curl_easy_setopt(p_curl, CURLOPT_VERBOSE, 1L));
 	return (gaiaWebHandle)p_curl;
 }
-#endif 0
+#endif//0
 
 void gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, const uint32_t dst_size, void* p_dst) {
 	assert(p_src != NULL && p_dst != NULL);
@@ -337,6 +340,7 @@ void gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const u
 	gaiaReadBinaryFile("GaiaUniverseModel_tmp.bin", flags, offset, size, p_dst_size, pp_dst);
 }
 
+#if 0
 void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count) {
 	assert(src_path != NULL && dst_path != NULL);
 
@@ -442,7 +446,6 @@ void gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t b
 	fclose(dst_stream);
 }
 
-#if 0
 void gaiaSplit(const char* src_dir, const char* src_id) {
 	assert(src_dir != NULL && src_id != NULL);
 
