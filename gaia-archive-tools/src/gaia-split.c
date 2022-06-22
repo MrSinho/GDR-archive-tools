@@ -8,6 +8,7 @@ extern "C" {
 #include <stdio.h>
 
 int main(int argc, char** argv) {//example call: ./gaia-split ../gaia-bin/  0
+    //gaiaSplit("../gaia-bin/", 0);
     if (argc == 3) {
         gaiaSplit(argv[1], (uint32_t)atoi(argv[2]));
     }

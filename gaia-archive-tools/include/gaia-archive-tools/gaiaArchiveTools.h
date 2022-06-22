@@ -206,7 +206,7 @@ extern uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const 
 
 extern uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
-extern uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
+extern uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const uint8_t half, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
 #if 0
 #include <curl/curl.h>

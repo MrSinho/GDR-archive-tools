@@ -193,7 +193,7 @@ uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags fl
 	return 1;
 }
 
-uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
+uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const uint8_t half, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
 	gaiaError(src_dir == NULL || p_dst_size == NULL || pp_dst == NULL, "invalid arguments", return 0);
 
 	char s_src_id[5] = "0000";
@@ -202,7 +202,14 @@ uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, con
 	strcpy(src_path, src_dir);
 	strcat(src_path, "/gaiaUniverseModel_");
 	strcat(src_path, s_src_id);
+	if (half != UINT8_MAX) {
+		strcat(src_path, ".");
+		char s_half[2] = "0";
+		itoa(half, s_half, 10);
+		strcat(src_path, s_half);
+	}
 	strcat(src_path, ".bin");
+
 	gaiaReadBinaryFile(src_path, flags, offset, size, p_dst_size, pp_dst);
 	
 	return 1;
@@ -366,11 +373,15 @@ uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_
 			src_body_count++;
 		}
 	}
+	CsvClose(csv);
 
 	uint32_t dst_offset = 0;
 	void* p_dst = calloc(src_body_count, GAIA_BODY_SIZE);
 	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
 
+
+	csv = CsvOpen(src_path);
+	row = CsvReadNextRow(csv);
 	for (uint32_t i = 0; row != NULL && i < body_count; i++) {
 		row = CsvReadNextRow(csv);
 		if (row != NULL) {
