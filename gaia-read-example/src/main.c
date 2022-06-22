@@ -23,7 +23,7 @@ int main(void) {
 
     //If you have already downloaded the binaries:
 	gaiaReadBinaryFileFromID(
-		"../gaia_resources", 
+		"../gaia-resources", 
 		(uint32_t)0, 
 		GAIA_RA | GAIA_DEC, 
 		(uint32_t)0, 

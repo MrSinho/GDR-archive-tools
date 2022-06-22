@@ -7,7 +7,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) {//example call: ./gaia-exp 
     if (argc == 3) {
         gaiaConvertCSV(
             argv[1],

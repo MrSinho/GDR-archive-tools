@@ -8,13 +8,13 @@ def id_to_filename(i):
         filename_list.insert(0, 0)
     return "".join(str(v) for v in filename_list)
 
-def compress_catalogues(range_start, range_end):
+def convert_catalogues(range_start, range_end):
     for i in range (range_start, range_end, 1):
-        src_name = "../gaia_bin/GaiaUniverseModel_" + id_to_filename(i) + ".bin"
-        dst_name = "../gaia_bin/GaiaUniverseModel_" + id_to_filename(i) + ".rar"
+        src_name = "../gaia-csv/gaiaUniverseModel_" + id_to_filename(i) + ".csv"
+        dst_name = "../gaia-bin/gaiaUniverseModel_" + id_to_filename(i) + ".bin"
         print(f"Converting {src_name} to {dst_name}")
         #subprocess.call(f"./../bin/gaia-exp {src_name} {dst_name}", stdout=FNULL, stderr=FNULL, shell=False)
-        os.system(f"rar a -r {dst_name} {src_name}")
+        subprocess.run(["./../bin/gaia-exp", src_name, dst_name])
 
 def main():
     range_start = 0
@@ -25,7 +25,7 @@ def main():
             range_end   = int(sys.argv[1])+1
     if (len(sys.argv) > 2):
         if (sys.argv[2].isnumeric()): range_end = int(sys.argv[2])+1
-    compress_catalogues(range_start, range_end)
+    convert_catalogues(range_start, range_end)
 
 if __name__ == '__main__':
     main()

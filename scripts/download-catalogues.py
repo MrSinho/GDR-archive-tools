@@ -16,13 +16,13 @@ def unzip_gaia_catalogue(directory, filename, extension):
 
 def download_gaia_catalogue(filename):
     extension = ".csv.gz"
-    filename = "GaiaUniverseModel_" + filename
-    link = "http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/" + filename + extension
+    filename = filename
+    link = "http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/" + "GaiaUniverseModel_" + filename + extension
     print(f"downloading {link}\n")
     buffer = requests.get(link)
-    directory = "../gaia_csv/"
-    open(directory+filename+extension, "wb").write(buffer.content)    
-    unzip_gaia_catalogue(directory, filename, extension)
+    directory = "../gaia-csv/"
+    open(directory+"gaiaUniverseModel_"+filename+extension, "wb").write(buffer.content)    
+    unzip_gaia_catalogue(directory, "gaiaUniverseModel_"+filename, extension)
 
 def download_catalogues(range_start, range_end):
     for i in range (range_start, range_end, 1):
