@@ -14,7 +14,7 @@ def main():
         start = int(sys.argv[1])
         end = int(sys.argv[2])
         dir = "../gaia-bin/"
-        for i in range (start, end + 1, 1):
+        for i in range (start, end, 1):
             idx = str(i)
             print(f"Splitting catalogue {idx} at {dir}")
             subprocess.run(["./../bin/gaia-split", dir, idx])
