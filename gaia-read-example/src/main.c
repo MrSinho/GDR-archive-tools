@@ -12,7 +12,7 @@ int main(void) {
 	uint32_t read_data = 0;
 	
 	char src_id[5];
-	gaiaUniverseModelGetId(25, src_id); //"0025"
+	gaiaUniverseModelGetId(0, src_id); //"0025"
 
 	float* values;
 

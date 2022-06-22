@@ -167,38 +167,19 @@ extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
 
 #include <stdio.h>
 
-extern uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteLong(const uint64_t val, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteLong(const uint64_t val, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteDouble(const double val, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteDouble(const double val, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteFloat(const float val, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteFloat(const float val, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteBoolean(const char* src, uint32_t* p_offset, FILE* dst_stream);
+extern uint8_t gaiaWriteBoolean(const char* src, uint32_t* p_dst_offset, void* p_dst);
 
-extern uint8_t gaiaWriteInt(const uint32_t val, uint32_t* p_offset, FILE* dst_stream);
-
-extern uint8_t gaiaStreamReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, FILE* src_stream);
-
-#define gaiaStreamReadByte(p_val, src_offset, p_dst_offset, src_stream)\
-	gaiaStreamReadBuffer((void*)(p_val), 1, src_offset, p_dst_offset, src_stream)
-
-#define gaiaStreamReadLong(p_val, src_offset, p_dst_offset, src_stream)\
-	gaiaStreamReadBuffer((void*)(p_val), 8, src_offset, p_dst_offset, src_stream)
-
-#define gaiaStreamReadDouble(p_val, src_offset, p_dst_offset, src_stream)\
-	gaiaStreamReadBuffer((void*)(p_val), 8, src_offset, p_dst_offset, src_stream)
-
-#define gaiaStreamReadFloat(p_val, src_offset, p_dst_offset, src_stream)\
-	gaiaStreamReadBuffer((void*)(p_val), 4, src_offset, p_dst_offset, src_stream)
-
-#define gaiaStreamReadInt(p_val, src_offset, p_dst_offset, src_stream)\
-    gaiaStreamReadBuffer((void*)(p_val), 4, src_offset, p_dst_offset, src_stream)
-
-extern uint8_t gaiaStreamReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_dst_offset, FILE* src_stream);
+extern uint8_t gaiaWriteInt(const uint32_t val, uint32_t* p_dst_offset, void* p_dst);
 
 extern uint8_t gaiaReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src);
 
@@ -237,9 +218,9 @@ extern gaiaWebHandle gaiaWebSetup(const uint8_t debug);
     curl_easy_cleanup((CURL*)gaia_web_handle)
 #endif//0
 extern uint8_t gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
-#if 0
-extern void gaiaSplit(const char* src_dir, const char* src_id);
-#endif//0
+
+extern uint8_t gaiaSplit(const char* src_dir, const uint32_t src_id);
+
 #define gaiaFree(p_buffer)\
     free(p_buffer)
 

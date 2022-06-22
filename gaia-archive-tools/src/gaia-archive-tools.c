@@ -8,9 +8,6 @@ extern "C" {
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)
 #endif//_MSC_VER
-#if 0
-#include <curl/curl.h>
-#endif//0
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -81,95 +78,63 @@ uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	return src_size;
 }
 
-uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	uint8_t _val = val;
-	fwrite(&_val, 1, 1, dst_stream);
-	fseek(dst_stream, 0, SEEK_SET);
-	(*p_offset)++;
-	fseek(dst_stream, *p_offset, SEEK_SET);
-	return 1;
-}
-
-uint8_t gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	fwrite(src, 1, size, dst_stream);
-	fseek(dst_stream, 0, SEEK_SET);
-	(*p_offset) += size;
-	fseek(dst_stream, *p_offset, SEEK_CUR);
-	return 1;
-}
-
-uint8_t gaiaWriteLong(const uint64_t val, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	const uint64_t _val = val;
-	gaiaWriteBuffer((void*)&_val, 8, p_offset, dst_stream);
-	return 1;
-}
-
-uint8_t gaiaWriteDouble(const double val, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	const double _val = val;
-	gaiaWriteBuffer((void*)&_val, 8, p_offset, dst_stream);
-	return 1;
-}
-
-uint8_t gaiaWriteFloat(const float val, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	const float _val = val;
-	gaiaWriteBuffer((void*)&_val, 4, p_offset, dst_stream);
-	return 1;
-}
-
-uint8_t gaiaWriteBoolean(const char* src, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	if (strcmp(src, "True") == 0) {
-		gaiaWriteByte(1, p_offset, dst_stream);
-	}
-	else {
-		gaiaWriteByte(0, p_offset, dst_stream);
-	}
-	return 1;
-}
-
-uint8_t gaiaWriteInt(const uint32_t val, uint32_t* p_offset, FILE* dst_stream) {
-	gaiaError(p_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(dst_stream == NULL, "invalid destination buffer memory", return 0);
-	const uint32_t _val = val;
-	gaiaWriteBuffer((void*)&_val, 4, p_offset, dst_stream);
-	return 1;
-}
-
-
-uint8_t gaiaStreamReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, FILE* src_stream) {
+uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_dst_offset, void* p_dst) {
 	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(src_stream == NULL, "invalid source buffer memory", return 0);
-	fseek(src_stream, 0, SEEK_SET);
-	fseek(src_stream, src_offset, SEEK_SET);
-	fread(p_dst, 1, size, src_stream);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	memset(&((uint8_t*)p_dst)[*p_dst_offset], val, 1);
+	(*p_dst_offset)++;
+	return 1;
+}
+
+uint8_t gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_dst_offset, void* p_dst) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	memcpy((void*)(&((char*)p_dst)[*p_dst_offset]), src, size);
 	(*p_dst_offset) += size;
 	return 1;
 }
 
-uint8_t gaiaStreamReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_dst_offset, FILE* src_stream) {
+uint8_t gaiaWriteLong(const uint64_t val, uint32_t* p_dst_offset, void* p_dst) {
 	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(src_stream == NULL, "invalid source buffer memory", return 0);
-#ifndef GAIA_DOUBLE_PRECISION
-	fseek(src_stream, 0, SEEK_SET);
-	fseek(src_stream, src_offset, SEEK_SET);
-	double _val;
-	fread((void*)&_val, 1, 8, src_stream);
-	*p_val = (gaia_real)_val;
-	(*p_dst_offset) += sizeof(gaia_real);
-#else
-	gaiaStreamReadBuffer((void*)p_val, sizeof(gaia_real), src_offset, p_dst_offset, src_stream);
-#endif//GAIA_DOUBLE_PRECISION
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	const uint64_t _val = val;
+	gaiaWriteBuffer((void*)&_val, 8, p_dst_offset, p_dst);
+	return 1;
+}
+
+uint8_t gaiaWriteDouble(const double val, uint32_t* p_dst_offset, void* p_dst) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	const double _val = val;
+	gaiaWriteBuffer((void*)&_val, 8, p_dst_offset, p_dst);
+	return 1;
+}
+
+uint8_t gaiaWriteFloat(const float val, uint32_t* p_dst_offset, void* p_dst) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	const float _val = val;
+	gaiaWriteBuffer((void*)&_val, 4, p_dst_offset, p_dst);
+	return 1;
+}
+
+uint8_t gaiaWriteBoolean(const char* src, uint32_t* p_dst_offset, void* p_dst) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	if (strcmp(src, "True") == 0) {
+		gaiaWriteByte(1, p_dst_offset, p_dst);
+	}
+	else {
+		gaiaWriteByte(0, p_dst_offset, p_dst);
+	}
+	return 1;
+}
+
+uint8_t gaiaWriteInt(const uint32_t val, uint32_t* p_dst_offset, void* p_dst) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+	const uint32_t _val = val;
+	gaiaWriteBuffer((void*)&_val, 4, p_dst_offset, p_dst);
 	return 1;
 }
 
@@ -192,7 +157,7 @@ uint8_t gaiaReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_ds
 	*p_val = (gaia_real)_val;
 	(*p_dst_offset) += sizeof(gaia_real);
 #else
-	gaiaStreamReadBuffer((void*)p_val, sizeof(gaia_real), src_offset, p_dst_offset, p_src);
+	gaiaReadBuffer((void*)p_val, sizeof(gaia_real), src_offset, p_dst_offset, p_src);
 #endif//GAIA_DOUBLE_PRECISION
 	return 1;
 }
@@ -366,6 +331,7 @@ uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uin
 	return 1;
 }
 
+#if 0
 uint8_t gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
 	gaiaError(p_dst_size == NULL || pp_dst == NULL, "invalid arguments", return 0);
 
@@ -383,16 +349,28 @@ uint8_t gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, cons
 
 	return 1;
 }
+#endif//0
 
 uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count) {
 	gaiaError(src_path == NULL || dst_path == NULL, "invalid arguments", return 0);
 
-	FILE* dst_stream = fopen(dst_path, "wb");
-	gaiaError(dst_stream == NULL, "invalid destination path", return 0);
-
-	uint32_t offset = 0;
 	CsvHandle csv = CsvOpen(src_path);
 	char* row = CsvReadNextRow(csv);
+
+	uint32_t src_body_count = 0;
+	if (body_count != UINT32_MAX) {
+		src_body_count = body_count;
+	}
+	else {
+		while (CsvReadNextRow(csv) != NULL) {
+			src_body_count++;
+		}
+	}
+
+	uint32_t dst_offset = 0;
+	void* p_dst = calloc(src_body_count, GAIA_BODY_SIZE);
+	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+
 	for (uint32_t i = 0; row != NULL && i < body_count; i++) {
 		row = CsvReadNextRow(csv);
 		if (row != NULL) {
@@ -401,105 +379,115 @@ uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_
 				if (column != NULL) {
 					switch (j) {
 					case SOURCE_EXTENDED_ID_IDX: 
-						gaiaWriteBuffer((void*)column, 20, &offset, dst_stream); break;
+						gaiaWriteBuffer((void*)column, 20, &dst_offset, p_dst); break;
 					case SOURCE_ID_IDX:
-						gaiaWriteLong((uint64_t)atol(column), &offset, dst_stream); break;
+						gaiaWriteLong((uint64_t)atol(column), &dst_offset, p_dst); break;
 					case SOLUTION_ID_IDX:
-						gaiaWriteLong((uint64_t)atol(column), &offset, dst_stream); break;
+						gaiaWriteLong((uint64_t)atol(column), &dst_offset, p_dst); break;
 					case RA_IDX:
-						gaiaWriteDouble((double)atof(column), &offset, dst_stream); break;
+						gaiaWriteDouble((double)atof(column), &dst_offset, p_dst); break;
 					case DEC_IDX:
-						gaiaWriteDouble((double)atof(column), &offset, dst_stream); break;
+						gaiaWriteDouble((double)atof(column), &dst_offset, p_dst); break;
 					case BARYCENTRIC_DISTANCE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case PMRA_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case PMDEC_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case RADIAL_VELOCITY_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MAG_G_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MAG_BP_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MAG_RP_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MAG_RVS_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case V_I_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MEAN_ABSOLUTE_V_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case AG_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case AV_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case TEFF_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case LOGG_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case FEH_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case ALPHAFE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MBOL_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case AGE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case MASS_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case RADIUS_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case VSINI_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case POPULATION_IDX:
-						gaiaWriteByte((uint8_t)atoi(column), &offset, dst_stream); break;
+						gaiaWriteByte((uint8_t)atoi(column), &dst_offset, p_dst); break;
 					case HAS_PHOTOCENTER_MOTION_IDX:
-						gaiaWriteBoolean(column, &offset, dst_stream); break;
+						gaiaWriteBoolean(column, &dst_offset, p_dst); break;
 					case NC_IDX:
-						gaiaWriteInt((uint32_t)atoi(column), &offset, dst_stream); break;
+						gaiaWriteInt((uint32_t)atoi(column), &dst_offset, p_dst); break;
 					case NT_IDX:
-						gaiaWriteInt((uint32_t)atoi(column), &offset, dst_stream); break;
+						gaiaWriteInt((uint32_t)atoi(column), &dst_offset, p_dst); break;
 					case SEMIMAJOR_AXIS_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case ECCENTRICITY_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case INCLINATION_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case LONGITUDE_ASCENDING_NODE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case ORBIT_PERIOD_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case PERIASTRON_DATE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case PERIASTRON_ARGUMENT_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case VARIABILITY_AMPLITUDE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case VARIABILITY_PERIOD_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					case VARIABILITY_PHASE_IDX:
-						gaiaWriteFloat((float)atof(column), &offset, dst_stream); break;
+						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
 					}
 				}
 			}
 		}
-		fflush(dst_stream);
 	}
+
+	FILE* dst_stream = fopen(dst_path, "wb");
+	gaiaError(dst_stream == NULL, "invalid destination path", return 0);
+
+	fwrite(p_dst, src_body_count, GAIA_BODY_SIZE, dst_stream);
+
+	free(p_dst);
 	fclose(dst_stream);
+	CsvClose(csv);
 
 	return 1;
 }
 
-uint8_t gaiaSplit(const char* src_dir, const char* src_id) {
-	gaiaError(src_dir == NULL || src_id == NULL, "invalid arguments", return 0);
+uint8_t gaiaSplit(const char* src_dir, const uint32_t src_id) {
+	gaiaError(src_dir == NULL, "invalid source directory", return 0);
 
 	char dst_0_path[256]; char dst_1_path[256];
 	
 	char src_path[256];
 	strcpy(src_path, src_dir);
-	strcat(src_path, "/GaiaUniverseModel_");
-	strcat(src_path, src_id);
+	strcat(src_path, "/gaiaUniverseModel_");
+
+	char s_src_id[5] = "0000";
+	gaiaUniverseModelGetId(src_id, s_src_id);;
+	strcat(src_path, s_src_id);
 
 	strcpy(dst_0_path, src_path);
 	strcpy(dst_1_path, src_path);
