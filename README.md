@@ -24,8 +24,8 @@ Tutorial
 
 Open the terminal and run the following commands:
 ```bash
-git clone --recursive https://github.com/MrSinho/Gaia_Archive_Tools.git
-cd Gaia_Archive_Tools
+git clone --recursive https://github.com/MrSinho/gaia-archive-tools.git
+cd gaia-archive-tools
 mkdir build
 cd build
 cmake ..
