@@ -5,6 +5,7 @@ import os
 
 
 def main():
+    print("This function is no longer available\n");
     if (len(sys.argv) == 2):
         dir = "../gaia-bin/"
         idx = str(sys.argv[1])

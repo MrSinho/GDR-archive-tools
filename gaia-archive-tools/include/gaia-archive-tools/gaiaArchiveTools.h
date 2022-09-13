@@ -52,55 +52,54 @@ extern "C" {
 
 #define GAIA_BODY_VARIABLES 42
 
-#define GAIA_BODY_SIZE 186
-
 #ifdef _MSC_VER
 #pragma warning (disable: 4293)
 #endif//_MSC_VER
 
-typedef uint64_t GaiaCelestialBodyFlags;
-#define GAIA_SOURCE_EXTENDED_ID (uint64_t)1 << 0
-#define GAIA_SOURCE_ID (uint64_t)1 << 1
-#define GAIA_SOLUTION_ID (uint64_t)1 << 2
-#define GAIA_RA (uint64_t)1 << 3
-#define GAIA_DEC (uint64_t)1 << 4
-#define GAIA_BARYCENTRIC_DISTANCE (uint64_t)1 << 5
-#define GAIA_PMRA (uint64_t)1 << 6
-#define GAIA_PMDEC (uint64_t)1 << 7
-#define GAIA_RADIAL_VELOCITY (uint64_t)1 << 8
-#define GAIA_MAG_G (uint64_t)1 << 9
-#define GAIA_MAG_BP (uint64_t)1 << 10
-#define GAIA_MAG_RP (uint64_t)1 << 11
-#define GAIA_MAG_RVS (uint64_t)1 << 12
-#define GAIA_V_I (uint64_t)1 << 13
-#define GAIA_MEAN_ABSOLUTE_V (uint64_t)1 << 14
-#define GAIA_AG (uint64_t)1 << 15
-#define GAIA_AV (uint64_t)1 << 16
-#define GAIA_TEFF (uint64_t)1 << 17
-#define GAIA_SPECTRAL_TYPE (uint64_t)1 << 18
-#define GAIA_LOGG (uint64_t)1 << 19
-#define GAIA_FEH (uint64_t)1 << 20
-#define GAIA_ALPHAFE (uint64_t)1 << 21
-#define GAIA_MBOL (uint64_t)1 << 22
-#define GAIA_AGE (uint64_t)1 << 23
-#define GAIA_MASS (uint64_t)1 << 24
-#define GAIA_RADIUS (uint64_t)1 << 25
-#define GAIA_VSINI (uint64_t)1 << 26
-#define GAIA_POPULATION (uint64_t)1 << 27
-#define GAIA_HAS_PHOTOCENTER_MOTION (uint64_t)1 << 28
-#define GAIA_NC (uint64_t)1 << 29
-#define GAIA_NT (uint64_t)1 << 30
-#define GAIA_SEMIMAJOR_AXIS (uint64_t)1 << 31
-#define GAIA_ECCENTRICITY (uint64_t)1 << 32
-#define GAIA_INCLINATION (uint64_t)1 << 33
-#define GAIA_LONGITUDE_ASCENDING_NODE (uint64_t)1 << 34
-#define GAIA_ORBIT_PERIOD (uint64_t)1 << 35
-#define GAIA_PERIASTRON_DATE (uint64_t)1 << 36
-#define GAIA_PERIASTRON_ARGUMENT (uint64_t)1 << 37
-#define GAIA_VARIABILITY_AMPLITUDE (uint64_t)1 << 38
-#define GAIA_VARIABILITY_PERIOD (uint64_t)1 << 39
-#define GAIA_VARIABILITY_PHASE (uint64_t)1 << 40
-#define GAIA_FULL_BODY (uint64_t)UINT64_MAX
+typedef enum GaiaCelestialBodyFlags {
+    GAIA_SOURCE_EXTENDED_ID = 1 << 0,
+    GAIA_SOURCE_ID = 1 << 1,
+    GAIA_SOLUTION_ID = 1 << 2,
+    GAIA_RA = 1 << 3,
+    GAIA_DEC = 1 << 4,
+    GAIA_BARYCENTRIC_DISTANCE = 1 << 5,
+    GAIA_PMRA = 1 << 6,
+    GAIA_PMDEC = 1 << 7,
+    GAIA_RADIAL_VELOCITY = 1 << 8,
+    GAIA_MAG_G = 1 << 9,
+    GAIA_MAG_BP = 1 << 10,
+    GAIA_MAG_RP = 1 << 11,
+    GAIA_MAG_RVS = 1 << 12,
+    GAIA_V_I = 1 << 13,
+    GAIA_MEAN_ABSOLUTE_V = 1 << 14,
+    GAIA_AG = 1 << 15,
+    GAIA_AV = 1 << 16,
+    GAIA_TEFF = 1 << 17,
+    GAIA_SPECTRAL_TYPE = 1 << 18,
+    GAIA_LOGG = 1 << 19,
+    GAIA_FEH = 1 << 20,
+    GAIA_ALPHAFE = 1 << 21,
+    GAIA_MBOL = 1 << 22,
+    GAIA_AGE = 1 << 23,
+    GAIA_MASS = 1 << 24,
+    GAIA_RADIUS = 1 << 25,
+    GAIA_VSINI = 1 << 26,
+    GAIA_POPULATION = 1 << 27,
+    GAIA_HAS_PHOTOCENTER_MOTION = 1 << 28,
+    GAIA_NC = 1 << 29,
+    GAIA_NT = 1 << 30,
+    GAIA_SEMIMAJOR_AXIS = 1 << 31,
+    GAIA_ECCENTRICITY = 1 << 32,
+    GAIA_INCLINATION = 1 << 33,
+    GAIA_LONGITUDE_ASCENDING_NODE = 1 << 34,
+    GAIA_ORBIT_PERIOD = 1 << 35,
+    GAIA_PERIASTRON_DATE = 1 << 36,
+    GAIA_PERIASTRON_ARGUMENT = 1 << 37,
+    GAIA_VARIABILITY_AMPLITUDE = 1 << 38,
+    GAIA_VARIABILITY_PERIOD = 1 << 39,
+    GAIA_VARIABILITY_PHASE = 1 << 40,
+    GAIA_FULL_BODY = UINT64_MAX
+} GaiaCelestialBodyFlags;
 
 #ifndef GAIA_DOUBLE_PRECISION
     typedef float gaia_real;
@@ -108,8 +107,10 @@ typedef uint64_t GaiaCelestialBodyFlags;
     typedef double gaia_real;
 #endif//GAIA_DOUBLE_PRECISION
 
+#define GAIA_SOURCE_EXTENDED_ID_MAX_SIZE 30
 typedef struct GaiaCelestialBody {
-    char        source_extended_id[20];
+    uint8_t     source_extended_id_length;
+    char        source_extended_id[GAIA_SOURCE_EXTENDED_ID_MAX_SIZE];
     uint64_t    source_id;
     uint64_t    solution_id;
     gaia_real   ra;
@@ -151,7 +152,7 @@ typedef struct GaiaCelestialBody {
     float       variability_phase;
 } GaiaCelestialBody;
 
-#define GAIA_CELESTIAL_BODY_MAX_SIZE 186
+#define GAIA_CELESTIAL_BODY_MAX_SIZE 197
 
 
 #define gaiaError(condition, error_msg, failure_expression)\
@@ -163,9 +164,7 @@ typedef struct GaiaCelestialBody {
 
 extern uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst);
 
-extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
-
-#include <stdio.h>
+extern uint32_t gaiaGetMaxBodySize(GaiaCelestialBodyFlags flags);
 
 extern uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_dst_offset, void* p_dst);
 
@@ -185,6 +184,9 @@ extern uint8_t gaiaReadBuffer(void* p_dst, const uint32_t size, const uint32_t s
 
 extern uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, const uint32_t dst_size, void* p_dst);
 
+#define gaiaCheckDestinationOffset(dst_offset, to_read, dst_size)\
+    if (((dst_offset) + (to_read)) > (dst_size)) { dst_offset -= to_read; break; } 
+
 #define gaiaReadByte(p_val, src_offset, p_dst_offset, p_src)\
 	gaiaReadBuffer((void*)(p_val), 1, src_offset, p_dst_offset, p_src)
 
@@ -202,11 +204,13 @@ extern uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, co
 
 extern uint8_t gaiaReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src);
 
+extern void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const GaiaCelestialBodyFlags flags, char* p_source_extended_id);
+
 extern uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
 
 extern uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
-extern uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const uint8_t half, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
+extern uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
 
 #if 0
 #include <curl/curl.h>
