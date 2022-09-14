@@ -52,35 +52,41 @@ Inside the cloned repository directory download the GEDR3 binaries by executing 
 
 ## Example
 ```c
-//Located at "repo-dir/gaia_read_example/src/main.c"
 #include <gaia-archive-tools/gaiaArchiveTools.h>
-#include <stdio.h>
+
 #include <stdlib.h>
+#include <stdio.h>
 
 int main(void) {
 
-	float* values;
+  char src_id[5];
+	void* p_bodies = NULL;
 	uint32_t read_data = 0;
 
-    //Downloads the file and reads the data
-    //if size is set to 0, the entire file will be read.
-    //char src_id[5];
-    //gaiaUniverseModelGetId(25, src_id); //"0025"
-    //gaiaReadWeb(src_id, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); 
+  gaiaUniverseModelGetId(1, src_id); //"0001"
+	printf("Reading ../gaia-bin/gaiaUniverseModel_%s.bin\n", src_id);
+		p_bodies = NULL;
+	read_data = 0;
 
-    //If you have already downloaded the binaries:
-    //Reads ../gaia_resources/GaiaUniverseModel_0003.bin
-    gaiaReadBinaryFileFromID("../gaia_resources", 3, GAIA_RA | GAIA_DEC, 0, 16, &read_data, &values); 
+	GaiaCelestialBodyFlags read_flags = GAIA_RA | GAIA_DEC | AIA_PMRA | GAIA_PMDEC | GAIA_RADIAL_VELOCITY;
 
-	printf("\n\tREAD %i BYTES:\n\n", read_data);
+	gaiaReadBinaryFileFromID(
+		"../gaia-bin",
+		1,//0001
+		read_flags,
+		0,
+		gaiaGetMaxBodySize(read_flags) * 2, //if size is set to 0, the entire file will be read.
+		&read_data,
+		&p_bodies
+	); //Reads ../gaia_resources/GaiaUniverseModel_0001.bin
 
-	printf("right ascension %f\n", values[0]);
-	printf("declination %f\n\n", values[1]);
+	if (p_bodies == NULL || read_data == 0) {
+		return 0;
+	}
 	
-	printf("right ascension %f\n", values[2]);
-	printf("declination %f\n\n", values[3]);
+	printData(read_data, p_bodies);
+	gaiaFree(p_bodies);
 
-	gaiaFree(values);
 	return 0;
 }
 ```
