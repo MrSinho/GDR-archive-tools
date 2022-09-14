@@ -8,9 +8,9 @@ extern "C" {
 int main(void) {
 	
     const char* src_path = "../gaia-csv/gaiaUniverseModel_0000.csv";
-    const char* dst_path = "../gaia-csv/gaiaUniverseModel_0000.csv";
+    const char* dst_path = "../gaia-bin/gaiaUniverseModel_0000.bin";
 
-    printf("Converting\n\t%s\n\tto\n\t%s", 
+    printf("Converting\n\t%s\n\tto\n\t%s\n", 
         src_path, 
         dst_path
     );
