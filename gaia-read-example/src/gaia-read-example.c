@@ -101,10 +101,6 @@ int main(void) {
 		gaiaFree(p_bodies);
 	}//WITHOUT SOURCE EXTENDED ID
 
-	{//NESTED DATA
-
-	}//NESTED DATA
-
 	return 0;
 }
 
