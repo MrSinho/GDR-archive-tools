@@ -107,10 +107,9 @@ typedef enum GaiaCelestialBodyFlags {
     typedef double gaia_real;
 #endif//GAIA_DOUBLE_PRECISION
 
-#define GAIA_SOURCE_EXTENDED_ID_MAX_SIZE 30
+#define GAIA_SOURCE_EXTENDED_ID_SIZE 24
 typedef struct GaiaCelestialBody {
-    uint8_t     source_extended_id_length;
-    char        source_extended_id[GAIA_SOURCE_EXTENDED_ID_MAX_SIZE];
+    char        source_extended_id[GAIA_SOURCE_EXTENDED_ID_SIZE];
     uint64_t    source_id;
     uint64_t    solution_id;
     gaia_real   ra;
@@ -152,8 +151,9 @@ typedef struct GaiaCelestialBody {
     float       variability_phase;
 } GaiaCelestialBody;
 
-#define GAIA_CELESTIAL_BODY_MAX_SIZE 197
+#define GAIA_CELESTIAL_BODY_MAX_SIZE 190
 
+#define GAIA_SRC_OFFSET(body_count) (GAIA_CELESTIAL_BODY_MAX_SIZE * (body_count))
 
 #define gaiaError(condition, error_msg, failure_expression)\
     if ((int)(condition)) {\
@@ -164,7 +164,7 @@ typedef struct GaiaCelestialBody {
 
 extern uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst);
 
-extern uint32_t gaiaGetMaxBodySize(GaiaCelestialBodyFlags flags);
+extern uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags);
 
 extern uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_dst_offset, void* p_dst);
 
@@ -208,9 +208,14 @@ extern void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx
 
 extern uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count);
 
-extern uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
+extern uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t dst_size, uint32_t* p_dst_size, void** pp_dst);
 
 extern uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst);
+
+static uint8_t gaiaReadBodies(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t first_body, const uint32_t body_count, uint32_t* p_dst_size, void** pp_dst) {
+    gaiaReadBinaryFileFromID(src_dir, src_id, flags, GAIA_SRC_OFFSET(first_body), gaiaGetBodySize(flags) * body_count, p_dst_size, pp_dst);
+    return 1;
+}
 
 #if 0
 #include <curl/curl.h>

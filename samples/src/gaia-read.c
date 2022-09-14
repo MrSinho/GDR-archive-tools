@@ -13,12 +13,14 @@ void printWithSourceExtendedId(const uint32_t read_data, GaiaCelestialBodyFlags 
 	printf("\n\tREAD %i BYTES:\n\n", read_data);
 
 	for (uint32_t i = 0; i < 2; i++) {
-		char source_extended_id[GAIA_SOURCE_EXTENDED_ID_MAX_SIZE];
-		float* p_values = gaiaProcessSourceExtendedId(p_bodies, i, flags, source_extended_id);
+		char* p_body = &((char*)p_bodies)[i * gaiaGetBodySize(flags)];
+		char* source_extended_id = p_body;
+		
+		float* p_values = (float*)(&p_body[GAIA_SOURCE_EXTENDED_ID_SIZE]);
 
 		printf("source extended id: %s\n", source_extended_id);
-		printf("right ascension %f deg\n", p_values[0]);
-		printf("declination %f deg\n\n", p_values[1]);
+		printf("right ascension: %f deg\n", p_values[0]);
+		printf("declination: %f deg\n\n", p_values[1]);
 
 	}
 	
@@ -30,10 +32,10 @@ void printData(const uint32_t read_data, float* p_bodies) {
 	for (uint32_t i = 0; i < 2; i++) {
 		
 		printf("right ascension: %f deg\n", p_bodies[5 * i + 0]);
-		printf("declination %f deg\n", p_bodies[5 * i + 1]);
-		printf("pmra %f mas\n", p_bodies[5 * i + 2]);
-		printf("pmdec %f mas\n", p_bodies[5 * i + 3]);
-		printf("radial velocity %f km/s\n\n", p_bodies[5 * i + 4]);
+		printf("declination: %f deg\n", p_bodies[5 * i + 1]);
+		printf("pmra: %f mas\n", p_bodies[5 * i + 2]);
+		printf("pmdec: %f mas\n", p_bodies[5 * i + 3]);
+		printf("radial velocity: %f km/s\n\n", p_bodies[5 * i + 4]);
 	}
 
 }
@@ -58,7 +60,7 @@ int main(void) {
 			0,//0000
 			read_flags,
 			0,
-			gaiaGetMaxBodySize(read_flags) * 2, //if size is set to 0, the entire file will be read.
+			gaiaGetBodySize(read_flags) * 2, //if size is set to 0, the entire file will be read.
 			//0,
 			&read_data,
 			&p_bodies
@@ -81,12 +83,12 @@ int main(void) {
 
 		GaiaCelestialBodyFlags read_flags = GAIA_RA | GAIA_DEC | GAIA_PMRA | GAIA_PMDEC | GAIA_RADIAL_VELOCITY;
 
-		gaiaReadBinaryFileFromID(
+		gaiaReadBodies(
 			"../gaia-bin",
 			1,//0001
 			read_flags,
-			0,
-			gaiaGetMaxBodySize(read_flags) * 2, //if size is set to 0, the entire file will be read.
+			1000,
+			2,
 			&read_data,
 			&p_bodies
 		); //Reads ../gaia_resources/GaiaUniverseModel_0001.bin

@@ -32,10 +32,10 @@ uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst) {
 	return 1;
 }
 
-uint32_t gaiaGetMaxBodySize(GaiaCelestialBodyFlags flags) {
+uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	uint32_t src_size = 0;
 	if (flags == GAIA_FULL_BODY) { return GAIA_CELESTIAL_BODY_MAX_SIZE; }
-	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += GAIA_SOURCE_EXTENDED_ID_MAX_SIZE; src_size++; }
+	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += GAIA_SOURCE_EXTENDED_ID_SIZE; }
 	if (flags & GAIA_SOURCE_ID) { src_size += 8; }
 	if (flags & GAIA_SOLUTION_ID) { src_size += 8; }
 	if (flags & GAIA_RA) { src_size += sizeof(gaia_real); }
@@ -168,7 +168,7 @@ void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const
 	GaiaCelestialBodyFlags _flags = flags;
 	(_flags & GAIA_SOURCE_EXTENDED_ID) && (_flags &= ~GAIA_SOURCE_EXTENDED_ID);
 
-	uint32_t body_size = gaiaGetMaxBodySize(_flags);
+	uint32_t body_size = gaiaGetBodySize(_flags);
 	uint32_t source_extended_ids_size = 0;
 
 	for (uint32_t _body_idx = 0; _body_idx < body_idx; _body_idx++) {
@@ -187,7 +187,7 @@ void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const
 	return &p_body[id_length + 1];//address at first value after source extended id
 }
 
-uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
+uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t dst_size, uint32_t* p_dst_size, void** pp_dst) {
 	gaiaError(pp_dst == NULL, "invalid destination buffer memory", return 0);
 	gaiaError(p_dst_size == NULL, "invalid destination size memory", return 0);
 
@@ -203,14 +203,16 @@ uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags fl
 
 	fread(p_src, 1, src_size, src_stream);
 
-	(*p_dst_size) = size;
-	if (size == 0) {
-		(*p_dst_size) = src_size / (uint32_t)GAIA_CELESTIAL_BODY_MAX_SIZE * gaiaGetMaxBodySize(flags);
+	uint32_t _dst_size = dst_size;
+	if (_dst_size == 0) {
+		_dst_size = src_size;
 	}
-	(*pp_dst) = calloc(1, *p_dst_size);
+	(*pp_dst) = calloc(1, _dst_size);
 	gaiaError(pp_dst == NULL, "invalid destination", return 0);
 
-	gaiaExtractBuffer(p_src, src_size, offset, flags, *p_dst_size, *pp_dst);
+	gaiaExtractBuffer(p_src, src_size, offset, flags, _dst_size, *pp_dst);
+
+	(*p_dst_size) = _dst_size;
 
 	fclose(src_stream);
 	free(p_src);
@@ -279,253 +281,201 @@ uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uin
 	uint8_t source_extended_id_size = 0;
 
 	while (src_offset < src_buffer_size) {
-		uint8_t source_extended_id_length = 0;
-		{
-			uint32_t __dst_offset = 0;
-			gaiaReadByte(&source_extended_id_length, src_offset, &__dst_offset, p_src);
-		}
-
-		if (flags & GAIA_SOURCE_EXTENDED_ID) { 
-			gaiaCheckDestinationOffset(dst_offset, 1, dst_size); 
-			gaiaReadByte((uint8_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src);
-		}
-		src_offset++;
-
 		if (flags & GAIA_SOURCE_EXTENDED_ID) {
-			gaiaCheckDestinationOffset(dst_offset, source_extended_id_length, dst_size); 
-			gaiaReadBuffer((void*)(&((char*)p_dst)[dst_offset]), source_extended_id_length, src_offset, &dst_offset, p_src);
+			gaiaReadBuffer((void*)(&((char*)p_dst)[dst_offset]), GAIA_SOURCE_EXTENDED_ID_SIZE, src_offset, &dst_offset, p_src);
 		}
-		src_offset += source_extended_id_length;
+		src_offset += GAIA_SOURCE_EXTENDED_ID_SIZE;
 
 		if (flags & GAIA_SOURCE_ID) { 
-			gaiaCheckDestinationOffset(dst_offset, 8, dst_size); 
 			gaiaReadLong((uint64_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 8;
 
 		if (flags & GAIA_SOLUTION_ID) { 
-			gaiaCheckDestinationOffset(dst_offset, 8, dst_size); 
 			gaiaReadLong((uint64_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 8;
 
 		if (flags & GAIA_RA) { 
-			gaiaCheckDestinationOffset(dst_offset, sizeof(gaia_real), dst_size);
 			gaiaReadReal((gaia_real*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 8;
 		if (flags & GAIA_DEC) { 
-			gaiaCheckDestinationOffset(dst_offset, sizeof(gaia_real), dst_size);
 			gaiaReadReal((gaia_real*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 8;
 
 		if (flags & GAIA_BARYCENTRIC_DISTANCE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_PMRA) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_PMDEC) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_RADIAL_VELOCITY) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MAG_G) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MAG_BP) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MAG_RP) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MAG_RVS) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_V_I) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MEAN_ABSOLUTE_V) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_AG) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_AV) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_TEFF) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_LOGG) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_FEH) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_ALPHAFE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MBOL) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_AGE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_MASS) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_RADIUS) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_VSINI) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_POPULATION) { 
-			gaiaCheckDestinationOffset(dst_offset, 1, dst_size); 
 			gaiaReadByte((uint8_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 1;
 
 		if (flags & GAIA_HAS_PHOTOCENTER_MOTION) { 
-			gaiaCheckDestinationOffset(dst_offset, 1, dst_size); 
 			gaiaReadByte((uint8_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 1;
 
 		if (flags & GAIA_NC) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadInt((uint32_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_NT) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadInt((uint32_t*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_SEMIMAJOR_AXIS) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_ECCENTRICITY) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_INCLINATION) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 
 		if (flags & GAIA_LONGITUDE_ASCENDING_NODE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_ORBIT_PERIOD) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_PERIASTRON_DATE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_PERIASTRON_ARGUMENT) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_VARIABILITY_AMPLITUDE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_VARIABILITY_PERIOD) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
 		
 		if (flags & GAIA_VARIABILITY_PHASE) { 
-			gaiaCheckDestinationOffset(dst_offset, 4, dst_size); 
 			gaiaReadFloat((float*)(&((char*)p_dst)[dst_offset]), src_offset, &dst_offset, p_src); 
 		}
 		src_offset += 4;
@@ -588,8 +538,7 @@ uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_
 				if (column != NULL) {
 					switch (j) {
 					case SOURCE_EXTENDED_ID_IDX: 
-						gaiaWriteByte((uint8_t)strlen(column), &dst_offset, p_dst);
-						gaiaWriteBuffer((void*)column, (uint32_t)strlen(column), &dst_offset, p_dst); break;
+						gaiaWriteBuffer((void*)column, GAIA_SOURCE_EXTENDED_ID_SIZE, &dst_offset, p_dst); break;
 					case SOURCE_ID_IDX:
 						gaiaWriteLong((uint64_t)atol(column), &dst_offset, p_dst); break;
 					case SOLUTION_ID_IDX:
