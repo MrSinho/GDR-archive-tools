@@ -6,10 +6,8 @@ extern "C" {
 
 #include <gaia-archive-tools/gaiaArchiveTools.h>
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <memory.h>
-#include <string.h>
+#include <stdio.h>
 
 void printWithSourceExtendedId(const uint32_t read_data, GaiaCelestialBodyFlags flags, void* p_bodies) {
 	printf("\n\tREAD %i BYTES:\n\n", read_data);
