@@ -31,11 +31,11 @@ void printData(const uint32_t read_data, float* p_bodies) {
 
 	for (uint32_t i = 0; i < 2; i++) {
 		
-		printf("right ascension: %f deg\n", p_bodies[0]);
-		printf("declination %f deg\n", p_bodies[1]);
-		printf("pmra %f mas\n", p_bodies[2]);
-		printf("pmdec %f mas\n", p_bodies[3]);
-		printf("radial velocity %f km/s\n\n", p_bodies[4]);
+		printf("right ascension: %f deg\n", p_bodies[5 * i + 0]);
+		printf("declination %f deg\n", p_bodies[5 * i + 1]);
+		printf("pmra %f mas\n", p_bodies[5 * i + 2]);
+		printf("pmdec %f mas\n", p_bodies[5 * i + 3]);
+		printf("radial velocity %f km/s\n\n", p_bodies[5 * i + 4]);
 	}
 
 }
