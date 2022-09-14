@@ -44,11 +44,11 @@ endfunction()
 
 
 function(build_examples)
-add_executable(gaia-read-example gaia-read-example/src/gaia-read-example.c)
-add_executable(gaia-convert-example gaia-convert-example/src/gaia-convert-example.c)
-target_link_libraries(gaia-read-example PUBLIC gaia-archive-tools)
-target_link_libraries(gaia-convert-example PUBLIC gaia-archive-tools)
-set_target_properties(gaia-read-example gaia-convert-example PROPERTIES
+add_executable(gaia-read-sample samples/src/gaia-read.c)
+add_executable(gaia-convert-sample samples/src/gaia-convert.c)
+target_link_libraries(gaia-read-sample PUBLIC gaia-archive-tools)
+target_link_libraries(gaia-convert-sample PUBLIC gaia-archive-tools)
+set_target_properties(gaia-read-sample gaia-convert-sample PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
     VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )

@@ -32,7 +32,11 @@ cmake ..
 cmake --build .
 ```
 
-## Download Universe Model Data
+## Manually unzip example source files
+
+Go to [gaia-bin](gaia-bin) and unzip the files before running the offline sample [gaia-read.c](samples/src/gaia-read.c) 
+
+## Download Universe Model Data (not required)
 
 Inside the cloned repository directory download the GEDR3 binaries by executing one of the scripts shown below: 
 ```bash
