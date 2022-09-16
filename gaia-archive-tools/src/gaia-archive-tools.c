@@ -187,7 +187,7 @@ void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const
 	return &p_body[id_length + 1];//address at first value after source extended id
 }
 
-uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t dst_size, uint32_t* p_dst_size, void** pp_dst) {
+uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
 	gaiaError(pp_dst == NULL, "invalid destination buffer memory", return 0);
 	gaiaError(p_dst_size == NULL, "invalid destination size memory", return 0);
 
@@ -203,9 +203,9 @@ uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags fl
 
 	fread(p_src, 1, src_size, src_stream);
 
-	uint32_t _dst_size = dst_size;
+	uint32_t _dst_size = size;
 	if (_dst_size == 0) {
-		_dst_size = src_size;
+		_dst_size = (src_size - offset) / GAIA_CELESTIAL_BODY_MAX_SIZE * gaiaGetBodySize(flags);
 	}
 	(*pp_dst) = calloc(1, _dst_size);
 	gaiaError(pp_dst == NULL, "invalid destination", return 0);
@@ -282,7 +282,9 @@ uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uin
 
 	while (src_offset < src_buffer_size) {
 		if (flags & GAIA_SOURCE_EXTENDED_ID) {
-			gaiaReadBuffer((void*)(&((char*)p_dst)[dst_offset]), GAIA_SOURCE_EXTENDED_ID_SIZE, src_offset, &dst_offset, p_src);
+			gaiaReadBuffer((void*)(&((char*)p_dst)[dst_offset]), GAIA_SOURCE_EXTENDED_ID_SIZE - 1, src_offset, &dst_offset, p_src);
+			((char*)p_dst)[dst_offset] = '\0';
+			dst_offset++;
 		}
 		src_offset += GAIA_SOURCE_EXTENDED_ID_SIZE;
 
