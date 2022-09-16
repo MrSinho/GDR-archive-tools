@@ -54,6 +54,7 @@ int main(void) {
 		printf("Reading ../gaia-bin/gaiaUniverseModel_%s.bin\n", src_id);
 
 		GaiaCelestialBodyFlags read_flags = GAIA_SOURCE_EXTENDED_ID | GAIA_RA | GAIA_DEC;
+		//uint32_t sz = gaiaGetBodySize(read_flags); = 32 bytes
 
 		gaiaReadBinaryFileFromID(
 			"../gaia-bin",
@@ -61,7 +62,6 @@ int main(void) {
 			read_flags,
 			0,
 			gaiaGetBodySize(read_flags) * 2, //if size is set to 0, the entire file will be read.
-			//0,
 			&read_data,
 			&p_bodies
 		); //Reads ../gaia_resources/GaiaUniverseModel_0000.bin
@@ -82,13 +82,14 @@ int main(void) {
 		read_data = 0;
 
 		GaiaCelestialBodyFlags read_flags = GAIA_RA | GAIA_DEC | GAIA_PMRA | GAIA_PMDEC | GAIA_RADIAL_VELOCITY;
+		//uint32_t sz = gaiaGetBodySize(read_flags); = 20 bytes
 
 		gaiaReadBodies(
 			"../gaia-bin",
 			1,//0001
 			read_flags,
 			1000,
-			2,
+			0,//read the entire file from offset = 1000 * 20 bytes
 			&read_data,
 			&p_bodies
 		); //Reads ../gaia_resources/GaiaUniverseModel_0001.bin
