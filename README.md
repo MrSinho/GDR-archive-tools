@@ -4,6 +4,8 @@
   <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
 </p>
 
+[![windows_badge](.shci/windows-status.svg)](https://github.com/mrsinho/gaia-archive-tools/tree/main/.shci/windows-log.md)
+
 Documentation at https://mrsinho.github.io/docs/Gaia_Archive_Tools/index.html
 
 Setup
