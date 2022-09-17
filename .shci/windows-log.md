@@ -40,7 +40,7 @@ Warnings:
 
     
 ```bash
-mkdir build && cd build && cmake .. -DGAIA_ARCHIVE_TOOLS_BUILD_EXAMPLES=ON && cmake --build .
+cd gaia-arhive-tools && mkdir build && cd build && cmake .. -DGAIA_ARCHIVE_TOOLS_BUILD_EXAMPLES=ON && cmake --build .
 ```
 
 ```bash
