@@ -7,48 +7,50 @@ extern "C" {
 
 #include <stdint.h>
 
-#define SOURCE_EXTENDED_ID_IDX          0
-#define SOURCE_ID_IDX                   1
-#define SOLUTION_ID_IDX                 2
-#define RA_IDX                          3
-#define DEC_IDX                         4
-#define BARYCENTRIC_DISTANCE_IDX        5
-#define PMRA_IDX                        6
-#define PMDEC_IDX                       7
-#define RADIAL_VELOCITY_IDX             8
-#define MAG_G_IDX                       9
-#define MAG_BP_IDX                      10
-#define MAG_RP_IDX                      11
-#define MAG_RVS_IDX                     12
-#define V_I_IDX                         13
-#define MEAN_ABSOLUTE_V_IDX             14
-#define AG_IDX                          15
-#define AV_IDX                          16
-#define TEFF_IDX                        17
-#define SPECTRAL_TYPE_IDX               18
-#define LOGG_IDX                        19
-#define FEH_IDX                         20
-#define ALPHAFE_IDX                     21
-#define MBOL_IDX                        22
-#define AGE_IDX                         23
-#define MASS_IDX                        24
-#define RADIUS_IDX                      25
-#define VSINI_IDX                       26
-#define POPULATION_IDX                  27
-#define HAS_PHOTOCENTER_MOTION_IDX      28
-#define NC_IDX                          29
-#define NT_IDX                          30
-#define SEMIMAJOR_AXIS_IDX              31
-#define ECCENTRICITY_IDX                32
-#define INCLINATION_IDX                 33
-#define LONGITUDE_ASCENDING_NODE_IDX    34
-#define ORBIT_PERIOD_IDX                35
-#define PERIASTRON_DATE_IDX             36
-#define PERIASTRON_ARGUMENT_IDX         37
-#define VARIABILITY_AMPLITUDE_IDX       38
-#define VARIABILITY_TYPE_IDX			39
-#define VARIABILITY_PERIOD_IDX          40
-#define VARIABILITY_PHASE_IDX           41
+typedef enum GaiaCelestialBodyPropertyIdx {
+    SOURCE_EXTENDED_ID_IDX          = 0,
+    SOURCE_ID_IDX                   = 1,
+    SOLUTION_ID_IDX                 = 2,
+    RA_IDX                          = 3,
+    DEC_IDX                         = 4,
+    BARYCENTRIC_DISTANCE_IDX        = 5,
+    PMRA_IDX                        = 6,
+    PMDEC_IDX                       = 7,
+    RADIAL_VELOCITY_IDX             = 8,
+    MAG_G_IDX                       = 9,
+    MAG_BP_IDX                      = 10,
+    MAG_RP_IDX                      = 11,
+    MAG_RVS_IDX                     = 12,
+    V_I_IDX                         = 13,
+    MEAN_ABSOLUTE_V_IDX             = 14,
+    AG_IDX                          = 15,
+    AV_IDX                          = 16,
+    TEFF_IDX                        = 17,
+    SPECTRAL_TYPE_IDX               = 18,
+    LOGG_IDX                        = 19,
+    FEH_IDX                         = 20,
+    ALPHAFE_IDX                     = 21,
+    MBOL_IDX                        = 22,
+    AGE_IDX                         = 23,
+    MASS_IDX                        = 24,
+    RADIUS_IDX                      = 25,
+    VSINI_IDX                       = 26,
+    POPULATION_IDX                  = 27,
+    HAS_PHOTOCENTER_MOTION_IDX      = 28,
+    NC_IDX                          = 29,
+    NT_IDX                          = 30,
+    SEMIMAJOR_AXIS_IDX              = 31,
+    ECCENTRICITY_IDX                = 32,
+    INCLINATION_IDX                 = 33,
+    LONGITUDE_ASCENDING_NODE_IDX    = 34,
+    ORBIT_PERIOD_IDX                = 35,
+    PERIASTRON_DATE_IDX             = 36,
+    PERIASTRON_ARGUMENT_IDX         = 37,
+    VARIABILITY_AMPLITUDE_IDX       = 38,
+    VARIABILITY_TYPE_IDX			= 39,
+    VARIABILITY_PERIOD_IDX          = 40,
+    VARIABILITY_PHASE_IDX           = 41
+} GaiaCelestialBodyPropertyIdx;
 
 #define GAIA_BODY_VARIABLES 42
 
@@ -113,7 +115,7 @@ typedef struct GaiaCelestialBody {
     uint64_t    source_id;
     uint64_t    solution_id;
     gaia_real   ra;
-    gaia_real   dec;
+    gaia_real   dec;//56 bytes total
     float       barycentric_distance;
     float       pmra;
     float       pmdec;
@@ -134,9 +136,9 @@ typedef struct GaiaCelestialBody {
     float       age;
     float       mass;
     float       radius;
-    float       vsini;
+    float       vsini;//56 + 84 = 140 bytes total
     uint8_t     population;
-    uint8_t     has_photocenter_motion;
+    uint8_t     has_photocenter_motion;//142
     uint32_t    nc;
     uint32_t    nt;
     float       semimajor_axis;
@@ -148,7 +150,7 @@ typedef struct GaiaCelestialBody {
     float       periastron_argument;
     float       variability_amplitude;
     float       variability_period;
-    float       variability_phase;
+    float       variability_phase;//142 + 48 = 190 bytes total
 } GaiaCelestialBody;
 
 #define GAIA_CELESTIAL_BODY_MAX_SIZE 190
