@@ -7,7 +7,7 @@
 
         
 
-Build ran for `17.88s`
+Build ran for `27.82s`
 
 ---
 
@@ -45,7 +45,7 @@ Warnings:
 
     
 ```bash
-cd gaia-archive-tools 
+cd gaia-archive-tools
 mkdir build
 cd build
 cmake .. -DGAIA_ARCHIVE_TOOLS_BUILD_EXAMPLES=ON 
