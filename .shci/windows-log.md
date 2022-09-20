@@ -7,7 +7,7 @@
 
         
 
-Build ran for `2.05s`
+Build ran for `1.56s`
 
 ---
 
@@ -58,7 +58,7 @@ cd gaia-archive-tools &&mkdir build&&cd build&&cmake .. -DGAIA_ARCHIVE_TOOLS_BUI
 
 ---
 
-Build terminated with exit code False
+Build terminated with exit code 1
 
 ---
 
