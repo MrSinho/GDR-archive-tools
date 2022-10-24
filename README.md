@@ -1,7 +1,7 @@
 # ESA Gaia Archive Tools
 
-[![linux-status](.shci/linux-exit_code.svg)](linux-log.md)
-[![windows-status](.shci/windows-exit_code.svg)](window-log.md)
+[![linux-status](.shci/linux-exit_code.svg)](.shci/linux-log.md)
+[![windows-status](.shci/windows-exit_code.svg)](.shci/window-log.md)
 
 ![](https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png)
 
