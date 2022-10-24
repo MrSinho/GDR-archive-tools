@@ -13,21 +13,22 @@ extern "C" {
 #include <stdio.h>
 #include <memory.h>
 #include <string.h>
+#include <inttypes.h>
 
 uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst) {
 	gaiaError(s_dst == NULL, "invalid destination memory", return 0);
 	strcpy(s_dst, "0000");
 	if (id >= 1000) {
-		itoa(id, s_dst, 10);
+		sprintf(s_dst, "%" PRIu32, id);
 	}
 	else if (100 <= id && id < 1000) {
-		itoa(id, &s_dst[1], 10);
+		sprintf(&s_dst[1], "%" PRIu32, id);
 	}
 	else if (10 <= id && id < 100) {
-		itoa(id, &s_dst[2], 10);
+		sprintf(&s_dst[2], "%" PRIu32, id);
 	}
 	else if (id < 10) {
-		itoa(id, &s_dst[3], 10);
+		sprintf(&s_dst[3], "%" PRIu32, id);
 	}
 	return 1;
 }
@@ -229,12 +230,6 @@ uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, con
 	strcpy(src_path, src_dir);
 	strcat(src_path, "/gaiaUniverseModel_");
 	strcat(src_path, s_src_id);
-	//if (half != UINT8_MAX) {
-	//	strcat(src_path, ".");
-	//	char s_half[2] = "0";
-	//	itoa(half, s_half, 10);
-	//	strcat(src_path, s_half);
-	//}
 	strcat(src_path, ".bin");
 
 	gaiaReadBinaryFile(src_path, flags, offset, size, p_dst_size, pp_dst);
@@ -536,89 +531,90 @@ uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_
 		row = CsvReadNextRow(csv);
 		if (row != NULL) {
 			for (uint32_t j = 0; j < GAIA_BODY_VARIABLES; j++) {
-				const char* column = CsvReadNextCol(row, csv);
+				char* column = (char*)CsvReadNextCol(row, csv);
+				char* end_column = &column[strlen(column) - 1];
 				if (column != NULL) {
 					switch (j) {
 					case SOURCE_EXTENDED_ID_IDX: 
 						gaiaWriteBuffer((void*)column, GAIA_SOURCE_EXTENDED_ID_SIZE, &dst_offset, p_dst); break;
 					case SOURCE_ID_IDX:
-						gaiaWriteLong((uint64_t)atol(column), &dst_offset, p_dst); break;
+						gaiaWriteLong((uint64_t)strtol(column, &end_column, 10), &dst_offset, p_dst); break;
 					case SOLUTION_ID_IDX:
-						gaiaWriteLong((uint64_t)atol(column), &dst_offset, p_dst); break;
+						gaiaWriteLong((uint64_t)strtol(column, &end_column, 10), &dst_offset, p_dst); break;
 					case RA_IDX:
-						gaiaWriteDouble((double)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteDouble((double)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case DEC_IDX:
-						gaiaWriteDouble((double)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteDouble((double)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case BARYCENTRIC_DISTANCE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case PMRA_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case PMDEC_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case RADIAL_VELOCITY_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MAG_G_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MAG_BP_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MAG_RP_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MAG_RVS_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case V_I_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MEAN_ABSOLUTE_V_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case AG_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case AV_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case TEFF_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case LOGG_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case FEH_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case ALPHAFE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MBOL_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case AGE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case MASS_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case RADIUS_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case VSINI_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case POPULATION_IDX:
-						gaiaWriteByte((uint8_t)atoi(column), &dst_offset, p_dst); break;
+						gaiaWriteByte((uint8_t)strtol(column, &end_column, 10), &dst_offset, p_dst); break;
 					case HAS_PHOTOCENTER_MOTION_IDX:
 						gaiaWriteBoolean(column, &dst_offset, p_dst); break;
 					case NC_IDX:
-						gaiaWriteInt((uint32_t)atoi(column), &dst_offset, p_dst); break;
+						gaiaWriteInt((uint32_t)strtol(column, &end_column, 10), &dst_offset, p_dst); break;
 					case NT_IDX:
-						gaiaWriteInt((uint32_t)atoi(column), &dst_offset, p_dst); break;
+						gaiaWriteInt((uint32_t)strtol(column, &end_column, 10), &dst_offset, p_dst); break;
 					case SEMIMAJOR_AXIS_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case ECCENTRICITY_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case INCLINATION_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case LONGITUDE_ASCENDING_NODE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case ORBIT_PERIOD_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case PERIASTRON_DATE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case PERIASTRON_ARGUMENT_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case VARIABILITY_AMPLITUDE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case VARIABILITY_PERIOD_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					case VARIABILITY_PHASE_IDX:
-						gaiaWriteFloat((float)atof(column), &dst_offset, p_dst); break;
+						gaiaWriteFloat((float)strtof(column, &end_column), &dst_offset, p_dst); break;
 					}
 				}
 			}

@@ -52,7 +52,11 @@ Mkfile.old
 dkms.conf
 
 bin/*
+unix-bin/*
+windows-bin/*
 build/*
+unix-build/*
+windows-build/*
 .vscode/*
 .vs/*
 .release/*

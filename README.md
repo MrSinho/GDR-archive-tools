@@ -1,10 +1,9 @@
 # ESA Gaia Archive Tools
-<p float="left">
-  <img src="https://www.cosmos.esa.int/documents/29201/0/Gaia_logo.png/62960d22-cdd9-02a2-c9d0-1bda19ab67cf?t=1607347628590" alt="drawing" width="170"/>
-  <img src="https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png" alt="drawing" width="270"/> 
-</p>
 
-[![windows_badge](.shci/windows-status.svg)](https://github.com/mrsinho/gaia-archive-tools/tree/main/.shci/windows-log.md)
+[![linux-status](.shci/linux-exit_code.svg)](linux-log.md)
+[![windows-status](.shci/windows-exit_code.svg)](window-log.md)
+
+![](https://www.gaudenzi.it/wp-content/uploads/2017/12/42_digital_logo_dark_blue_sign_A.png)
 
 Documentation at https://mrsinho.github.io/docs/Gaia_Archive_Tools/index.html
 
@@ -30,7 +29,7 @@ git clone --recursive https://github.com/MrSinho/gaia-archive-tools.git
 cd gaia-archive-tools
 mkdir build
 cd build
-cmake ..
+cmake .. #-DGAIA_ARCHIVE_TOOLS_BUILD_EXAMPLES=ON
 cmake --build .
 ```
 
