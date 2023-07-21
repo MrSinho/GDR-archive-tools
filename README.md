@@ -28,12 +28,12 @@ cmake --build .
 ```
 
 
-| CMake target                                           | type       |
-|--------------------------------------------------------|------------|
-| [gaia-archive-tools](./gaia-archive-tools/)            | library    |
-| [gaia-exp](./gaia-archive-tools/src/gaia-exp.c)        | executable |
-| [gaia-convert-sample](./samples/src/gaia-convert.c)    | executable |
-| [gaia-read-sample](./samples/gaia-read.c)              | executable |
+| CMake target                                                        | type       |
+|---------------------------------------------------------------------|------------|
+| [gaia-archive-tools](./gaia-archive-tools/src/gaia-archive-tools.c) | library    |
+| [gaia-exp](./gaia-archive-tools/src/gaia-exp.c)                     | executable |
+| [gaia-convert-sample](./samples/src/gaia-convert.c)                 | executable |
+| [gaia-read-sample](./samples/gaia-read.c)                           | executable |
 
 For any issues, see the [windows](.shci/windows/log.md) and [linux](.shci/linux/log.md) build logs.
 
