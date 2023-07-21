@@ -7,6 +7,8 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
 int main(int argc, char** argv) {//example call: ./gaia-split ../gaia-bin/  0
     //gaiaSplit("../gaia-bin/", 0);
     printf("This function is no longer compatible");
@@ -18,6 +20,8 @@ int main(int argc, char** argv) {//example call: ./gaia-split ../gaia-bin/  0
     }
     return 0;
 }
+
+
 
 #ifdef  __cplusplus
 }

@@ -29,6 +29,8 @@ def download_catalogues(range_start, range_end):
         filename = id_to_filename(i)
         download_gaia_catalogue(filename)
 
+#example call: python download-catalogues.py 0
+#example call: python download-catalogues.py 0 5
 def main():
     range_start = 0
     range_end = 5000

@@ -15,8 +15,14 @@ extern "C" {
 #include <string.h>
 #include <inttypes.h>
 
-uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst) {
+
+
+uint8_t gaiaUniverseModelGetId(
+	uint32_t id, 
+	char*    s_dst
+) {
 	gaiaError(s_dst == NULL, "invalid destination memory", return 0);
+
 	strcpy(s_dst, "0000");
 	if (id >= 1000) {
 		sprintf(s_dst, "%" PRIu32, id);
@@ -30,10 +36,14 @@ uint8_t gaiaUniverseModelGetId(const uint32_t id, char* s_dst) {
 	else if (id < 10) {
 		sprintf(&s_dst[3], "%" PRIu32, id);
 	}
+
 	return 1;
 }
 
-uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
+uint32_t gaiaGetBodySize(
+	GaiaCelestialBodyFlags flags
+) {
+
 	uint32_t src_size = 0;
 	if (flags == GAIA_FULL_BODY) { return GAIA_CELESTIAL_BODY_MAX_SIZE; }
 	if (flags & GAIA_SOURCE_EXTENDED_ID) { src_size += GAIA_SOURCE_EXTENDED_ID_SIZE; }
@@ -76,82 +86,140 @@ uint32_t gaiaGetBodySize(GaiaCelestialBodyFlags flags) {
 	if (flags & GAIA_VARIABILITY_AMPLITUDE) { src_size += 4; }
 	if (flags & GAIA_VARIABILITY_PERIOD) { src_size += 4; }
 	if (flags & GAIA_VARIABILITY_PHASE) { src_size += 4; }
+
 	return src_size;
 }
 
-uint8_t gaiaWriteByte(uint8_t val, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteByte(
+    uint8_t   val, 
+    uint32_t* p_dst_offset, 
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",     return 0);
+	gaiaError(p_dst        == NULL, "invalid dst buffer memory", return 0);
+
 	memset(&((uint8_t*)p_dst)[*p_dst_offset], val, 1);
 	(*p_dst_offset)++;
+
 	return 1;
 }
 
-uint8_t gaiaWriteBuffer(void* src, const uint32_t size, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteBuffer(
+    void*     src, 
+    uint32_t  size,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",     return 0);
+	gaiaError(p_dst        == NULL, "invalid dst buffer memory", return 0);
+
 	memcpy((void*)(&((char*)p_dst)[*p_dst_offset]), src, size);
 	(*p_dst_offset) += size;
+
 	return 1;
 }
 
-uint8_t gaiaWriteLong(const uint64_t val, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteLong(
+    uint64_t  val,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",             return 0);
+	gaiaError(p_dst        == NULL, "invalid destination buffer memory", return 0);
+
 	const uint64_t _val = val;
 	gaiaWriteBuffer((void*)&_val, 8, p_dst_offset, p_dst);
+
 	return 1;
 }
 
-uint8_t gaiaWriteDouble(const double val, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteDouble(
+    double    val,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",             return 0);
+	gaiaError(p_dst        == NULL, "invalid destination buffer memory", return 0);
+
 	const double _val = val;
 	gaiaWriteBuffer((void*)&_val, 8, p_dst_offset, p_dst);
+
 	return 1;
 }
 
-uint8_t gaiaWriteFloat(const float val, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteFloat(
+    float     val,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",             return 0);
+	gaiaError(p_dst        == NULL, "invalid destination buffer memory", return 0);
+
 	const float _val = val;
 	gaiaWriteBuffer((void*)&_val, 4, p_dst_offset, p_dst);
+
 	return 1;
 }
 
-uint8_t gaiaWriteBoolean(const char* src, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteBoolean(
+    char*     src,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",             return 0);
+	gaiaError(p_dst        == NULL, "invalid destination buffer memory", return 0);
+
 	if (strcmp(src, "True") == 0) {
 		gaiaWriteByte(1, p_dst_offset, p_dst);
 	}
 	else {
 		gaiaWriteByte(0, p_dst_offset, p_dst);
 	}
+
 	return 1;
 }
 
-uint8_t gaiaWriteInt(const uint32_t val, uint32_t* p_dst_offset, void* p_dst) {
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaWriteInt(
+    uint32_t  val,
+    uint32_t* p_dst_offset,
+    void*     p_dst
+) {
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",             return 0);
+	gaiaError(p_dst        == NULL, "invalid destination buffer memory", return 0);
+
 	const uint32_t _val = val;
 	gaiaWriteBuffer((void*)&_val, 4, p_dst_offset, p_dst);
+
 	return 1;
 }
 
-uint8_t gaiaReadBuffer(void* p_dst, const uint32_t size, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src) {
-	gaiaError(p_dst == NULL, "invalid destination memory", return 0);
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_src == NULL, "invalid source buffer memory", return 0);
+uint8_t gaiaReadBuffer(
+    void*     p_dst, 
+    uint32_t  size, 
+    uint32_t  src_offset, 
+    uint32_t* p_dst_offset,
+    void*     p_src
+) {
+	gaiaError(p_dst        == NULL, "invalid destination memory",   return 0);
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",        return 0);
+	gaiaError(p_src        == NULL, "invalid source buffer memory", return 0);
+
 	memcpy(p_dst, (void*)(&((char*)p_src)[src_offset]), size);
 	(*p_dst_offset) += size;
+
 	return 1;
 }
 
-uint8_t gaiaReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_dst_offset, void* p_src) {
-	gaiaError(p_val == NULL, "invalid destination value memory", return 0);
-	gaiaError(p_dst_offset == NULL, "invalid offset memory", return 0);
-	gaiaError(p_src == NULL, "invalid source buffer memory", return 0);
+uint8_t gaiaReadReal(
+    gaia_real* p_val,
+    uint32_t   src_offset,
+    uint32_t*  p_dst_offset,
+    void*      p_src
+) {
+	gaiaError(p_val        == NULL, "invalid destination value memory", return 0);
+	gaiaError(p_dst_offset == NULL, "invalid offset memory",            return 0);
+	gaiaError(p_src        == NULL, "invalid source buffer memory",     return 0);
+
 #ifndef GAIA_DOUBLE_PRECISION
 	double _val;
 	memcpy(&_val, (void*)(&((char*)p_src)[src_offset]), 8);
@@ -160,10 +228,16 @@ uint8_t gaiaReadReal(gaia_real* p_val, const uint32_t src_offset, uint32_t* p_ds
 #else
 	gaiaReadBuffer((void*)p_val, sizeof(gaia_real), src_offset, p_dst_offset, p_src);
 #endif//GAIA_DOUBLE_PRECISION
+
 	return 1;
 }
 
-void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const GaiaCelestialBodyFlags flags, char* p_source_extended_id) {
+void* gaiaProcessSourceExtendedId(
+    char*                  p_bodies,
+    uint32_t               body_idx, 
+    GaiaCelestialBodyFlags flags, 
+    char*                  p_source_extended_id
+) {
 	gaiaError(p_bodies == NULL, "invalid source bodies", return NULL);
 
 	GaiaCelestialBodyFlags _flags = flags;
@@ -188,8 +262,15 @@ void* gaiaProcessSourceExtendedId(char* p_bodies, const uint32_t body_idx, const
 	return &p_body[id_length + 1];//address at first value after source extended id
 }
 
-uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
-	gaiaError(pp_dst == NULL, "invalid destination buffer memory", return 0);
+uint8_t gaiaReadBinaryFile(
+	const char*            src_path, 
+	GaiaCelestialBodyFlags flags,
+	uint32_t               offset, 
+	uint32_t               size, 
+	uint32_t*              p_dst_size, 
+	void**                 pp_dst
+) {
+	gaiaError(pp_dst     == NULL, "invalid destination buffer memory", return 0);
 	gaiaError(p_dst_size == NULL, "invalid destination size memory", return 0);
 
 	FILE* src_stream = fopen(src_path, "rb");
@@ -221,8 +302,18 @@ uint8_t gaiaReadBinaryFile(const char* src_path, const GaiaCelestialBodyFlags fl
 	return 1;
 }
 
-uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
-	gaiaError(src_dir == NULL || p_dst_size == NULL || pp_dst == NULL, "invalid arguments", return 0);
+uint8_t gaiaReadBinaryFileFromID(
+    const char*            src_dir, 
+    uint32_t               src_id, 
+    GaiaCelestialBodyFlags flags, 
+    uint32_t               offset, 
+    uint32_t               size, 
+    uint32_t*              p_dst_size, 
+    void**                 pp_dst
+) {
+	gaiaError(src_dir    == NULL, "invalid src dir memory",     return 0);
+	gaiaError(p_dst_size == NULL, "invalid dst size memory",    return 0);
+	gaiaError(pp_dst     == NULL, "invalid destination memory", return 0);
 
 	char s_src_id[5] = "0000";
 	gaiaUniverseModelGetId(src_id, s_src_id);
@@ -237,38 +328,16 @@ uint8_t gaiaReadBinaryFileFromID(const char* src_dir, const uint32_t src_id, con
 	return 1;
 }
 
-#if 0
-uint8_t gaiaCheckCurlResult(const CURLcode r, const char* msg) {
-#ifndef NDEBUG
-	(r != CURLE_OK) && printf("gaia archive tools error: curl failure, %s, %s\n", msg, curl_easy_strerror(r));
-#endif//NDEBUG
-	gaiaError(r == CURLE_OK);
-}
-typedef struct curl_buffer_t {
-    char* p_src;
-    size_t size;
-} curl_buffer_t;
-
-size_t gaiaWebWriteCallback(char* p_src, size_t n_items, size_t item_size, void* p_dst_curl_buffer) {
-	curl_buffer_t* p_curl_buffer = (curl_buffer_t*)p_dst_curl_buffer;
-	size_t buffer_size = n_items * item_size;
-	memcpy(&(((char*)p_curl_buffer->p_src)[p_curl_buffer->size]), p_src, buffer_size);
-	p_curl_buffer->size += buffer_size;
-	return buffer_size;
-}
-gaiaWebHandle gaiaWebSetup(const uint8_t debug) {
-	CURL* p_curl = curl_easy_init();
-	gaiaCheckCurlResult(
-		curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, gaiaWebWriteCallback),
-		"cannot set download callback function"
-	);
-	(debug) && (curl_easy_setopt(p_curl, CURLOPT_VERBOSE, 1L));
-	return (gaiaWebHandle)p_curl;
-}
-#endif//0
-
-uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uint32_t offset, const GaiaCelestialBodyFlags flags, const uint32_t dst_size, void* p_dst) {
-	gaiaError(p_src == NULL || p_dst == NULL, "invalid arguments", return 0);
+uint8_t gaiaExtractBuffer(
+    void*                  p_src,
+    uint32_t               src_buffer_size,
+    uint32_t               offset,
+    GaiaCelestialBodyFlags flags, 
+    uint32_t               dst_size, 
+    void*                  p_dst
+) {
+	gaiaError(p_src == NULL, "invalid src memory", return 0);
+	gaiaError(p_dst == NULL, "invalid dst memory", return 0);
 
 	uint32_t src_offset = offset;
 	uint32_t dst_offset = 0;
@@ -483,28 +552,13 @@ uint8_t gaiaExtractBuffer(void* p_src, const uint32_t src_buffer_size, const uin
 	return 1;
 }
 
-#if 0
-uint8_t gaiaReadWeb(const char* src_id, const GaiaCelestialBodyFlags flags, const uint32_t offset, const uint32_t size, uint32_t* p_dst_size, void** pp_dst) {
-	gaiaError(p_dst_size == NULL || pp_dst == NULL, "invalid arguments", return 0);
-
-	*p_dst_size = size;
-
-	char cmd[256];
-	system("rm GaiaUniverseModel_tmp.bin");
-	strcpy(cmd, "wget https://github.com/MrSinho/GEDR3-binaries/blob/main/gedr3/GaiaUniverseModel_");
-	strcat(cmd, src_id);
-	strcat(cmd, ".bin?raw=true -O GaiaUniverseModel_tmp.bin");
-
-	gaiaError(system(cmd) != 0, "command failed", return 0);
-
-	gaiaReadBinaryFile("GaiaUniverseModel_tmp.bin", flags, offset, size, p_dst_size, pp_dst);
-
-	return 1;
-}
-#endif//0
-
-uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_t body_count) {
-	gaiaError(src_path == NULL || dst_path == NULL, "invalid arguments", return 0);
+uint8_t gaiaConvertCSV(
+    const char* src_path, 
+    const char* dst_path, 
+    uint32_t    body_count
+) {
+	gaiaError(src_path == NULL, "invalid src path memory", return 0);
+	gaiaError(dst_path == NULL, "invalid dst path memory", return 0);
 
 	CsvHandle csv = CsvOpen(src_path);
 	char* row = CsvReadNextRow(csv);
@@ -633,7 +687,10 @@ uint8_t gaiaConvertCSV(const char* src_path, const char* dst_path, const uint32_
 	return 1;
 }
 
-uint8_t gaiaSplit(const char* src_dir, const uint32_t src_id) {
+uint8_t gaiaSplit(
+	const char* src_dir,
+	uint32_t    src_id
+) {
 	gaiaError(src_dir == NULL, "invalid source directory", return 0);
 
 	char dst_0_path[256]; char dst_1_path[256];
@@ -694,6 +751,8 @@ uint8_t gaiaSplit(const char* src_dir, const uint32_t src_id) {
 
 	return 1;
 }
+
+
 
 #ifdef  __cplusplus
 }
