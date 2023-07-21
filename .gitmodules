@@ -2,3 +2,6 @@
 [submodule "external/csv-fast-reader"]
 	path = external/csv-fast-reader
 	url = https://github.com/jandoczy/csv-fast-reader
+[submodule ".shci/shci"]
+	path = .shci/shci
+	url = https://github.com/mrsinho/shci
