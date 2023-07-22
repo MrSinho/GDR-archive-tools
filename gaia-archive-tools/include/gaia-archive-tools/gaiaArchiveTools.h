@@ -159,7 +159,7 @@ typedef struct GaiaCelestialBody {
 
 #define GAIA_SRC_OFFSET(body_count) (GAIA_CELESTIAL_BODY_MAX_SIZE * (body_count))
 
-#define gaiaError(condition, error_msg, failure_expression)\
+#define gaiaToolsError(condition, error_msg, failure_expression)\
     if ((int)(condition)) {\
         printf("gaia-archive-tools error: %s\n", (const char*)error_msg);\
         failure_expression;\
