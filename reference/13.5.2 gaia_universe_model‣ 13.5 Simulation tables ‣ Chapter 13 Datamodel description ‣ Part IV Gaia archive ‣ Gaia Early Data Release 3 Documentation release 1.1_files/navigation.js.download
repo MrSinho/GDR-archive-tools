@@ -1,0 +1,126 @@
+// function KeyCheck(e)
+//  {
+//     var KeyID = (window.event) ? event.keyCode : e.keyCode;
+//
+//     switch(KeyID)
+//     {
+//        case 9:
+//        window.location = "CH1_TOC.html";
+//        break;
+//     }
+//  }
+/////////////////////////////This function is not used right now//////////////////////////////////////////////////
+function collapseAll(className){
+    //  var list = document.getElementById(divName);
+    var list = document.getElementsByClassName(className);
+    for (var i = 0; i < list.length; i++) {
+	list[i].style.visibility = 'hidden';
+	list[i].style.display = 'none';
+    }
+}
+///////////////////////////////////////////////////////////////////////////////
+function doHideShow(clssName){
+    var list = document.getElementsByClassName(clssName);
+    var stat = list[0].parentNode.getElementsByClassName('exco');
+    if (list[0].style.visibility == 'hidden') {
+	list[0].style.visibility = '';
+	list[0].style.display = 'block';
+	stat[0].innerHTML = '[-]  ';
+    stat[0].setAttribute('tabindex', "0");
+    stat[0].setAttribute('role', "button");
+	list[0].setAttribute('aria-expanded', "true");
+    } else {
+	list[0].style.visibility = 'hidden';
+	list[0].style.display = 'none';
+	stat[0].innerHTML = '[+]  ';
+    stat[0].setAttribute('tabindex', "0");
+    stat[0].setAttribute('role', "button");
+	list[0].setAttribute('aria-expanded', "false");
+    }
+}
+///////////////////////////////////////////////////////////////////////////////
+//this function creates a new element with a clickable item
+function addElement(classToCollapse){
+    var newp = document.createElement('span');
+    newp.setAttribute('class', 'exco');
+    newp.setAttribute('onclick','doHideShow("'+classToCollapse+'")');
+    //  newp.setAttribute('style','background-color:red');
+    newp.setAttribute('onKeyDown','buttonCollapse(event,"'+classToCollapse+'")');
+    var content = document.createTextNode("[-] ");
+    newp.appendChild(content);
+    newp.setAttribute('tabindex', "0");
+    newp.setAttribute('role', "button");
+    return newp;
+}
+///////////////////////////////////////////////////////////////////////////////
+window.onload = function(){
+    var selTOC = document.getElementsByTagName('nav');
+    var toclis = selTOC[0].getElementsByClassName('ltx_toclist');//selects the listed elements
+    var docaux = 0;
+    var partaux = 0;
+    var chapaux = 0;
+    var secaux = 0;
+    var subaux = 0;
+    var subsubaux = 0;
+    for (var p = 0; p < toclis.length; p++) {
+	var latex_level = toclis[p].className.slice(24, toclis[p].className.length);
+	var nodeName = toclis[p].parentNode.getElementsByClassName('ltx_ref_title');
+	switch (latex_level) {
+	case "document":
+	    toclis[p].className +=' '+latex_level+docaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+docaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    docaux += 1;
+	    break;
+	case "part":
+	    toclis[p].className +=' '+latex_level+partaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+partaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    partaux += 1;
+	    break;
+	case "chapter":
+	    toclis[p].className +=' '+latex_level+chapaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+chapaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    chapaux += 1;
+	    break;
+	case "section":
+	    toclis[p].className +=' '+latex_level+secaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+secaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    secaux += 1;
+	    break;
+	case "subsection":
+	    toclis[p].className +=' '+latex_level+subaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+subaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    subaux += 1;
+	    break;
+	case "subsubsection":
+	    toclis[p].className +=' '+latex_level+subsubaux+'';
+	    var clsToColl = toclis[p].className;
+	    toclis[p].setAttribute('clsSeparator', ''+latex_level+subsubaux+'');
+	    nodeName[0].parentNode.parentNode.insertBefore(addElement(clsToColl), nodeName[0].parentNode);
+	    subsubaux += 1;
+	    break;
+	default:
+	}
+    }
+}
+
+function buttonCollapse(event,classToCollapse) {
+  // Check to see if space or enter were pressed
+  if (event.key === " " || event.key === "Enter" || event.key === "Spacebar") { // "Spacebar" for IE11 support
+    // Prevent the default action to stop scrolling when space is pressed
+    event.preventDefault();
+    doHideShow(classToCollapse);
+  }
+}
+/*function handleBtnClick(event) {
+  doHideShow(event.target);
+}*/
