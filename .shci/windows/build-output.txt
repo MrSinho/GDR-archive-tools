@@ -1,11 +1,16 @@
 -- Selecting Windows SDK version 10.0.22000.0 to target Windows 10.0.22621.
--- Configuring done (0.0s)
--- Generating done (0.3s)
+-- Configuring done (0.5s)
+-- Generating done (0.5s)
 -- Build files have been written to: D:/home/desktop/GitHub/gaia-archive-tools/windows-build
 MSBuild version 17.6.3+07e294721 for .NET Framework
 
+  gaia-archive-tools.c
   gaia-archive-tools.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-archive-tools.lib
+  gaia-convert.c
   gaia-convert-sample.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-convert-sample.exe
+  gaia-exp.c
   gaia-exp.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-exp.exe
+  gaia-read.c
   gaia-read-sample.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-read-sample.exe
+  gaia-split.c
   gaia-split.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-split.exe

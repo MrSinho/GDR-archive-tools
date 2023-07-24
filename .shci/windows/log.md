@@ -15,7 +15,7 @@ max frequency : 3500.0 MHz
 cores         : 4
 ```
 
-build ran for `4.72 s` and terminated with exit code `0`
+build ran for `34.31 s` and terminated with exit code `0`
 
 ---
 
@@ -28,16 +28,23 @@ build ran for `4.72 s` and terminated with exit code `0`
 
 ```bash
 Chocolatey v2.0.0
-2 validations performed. 1 success(es), 1 warning(s), and 0 error(s).
+Chocolatey detected you are not running from an elevated command shell
+ (cmd/powershell).
 
-Validation Warnings:
- - A pending system reboot request has been detected, however, this is
-   being ignored due to the current Chocolatey configuration.  If you
-   want to halt when this occurs, then either set the global feature
-   using:
-     choco feature enable -name=exitOnRebootDetected
-   or pass the option --exit-when-reboot-detected.
+ You may experience errors - many functions/packages
+ require admin rights. Only advanced users should run choco w/out an
+ elevated shell. When you open the command shell, you should ensure
+ that you do so with "Run as Administrator" selected. If you are
+ attempting to use Chocolatey in a non-administrator setting, you
+ must select a different location other than the default install
+ location. See
+ https://docs.chocolatey.org/en-us/choco/setup#non-administrative-install
+ for details.
 
+For the question below, you have 20 seconds to make a selection.
+
+ Do you want to continue?([Y]es/[N]o): 
+Timeout or your choice of '' is not a valid selection.
 Installing the following packages:
 mingw;cmake
 By installing, you accept licenses for the packages.
@@ -55,6 +62,12 @@ Warnings:
  - mingw - mingw v12.2.0.03042023 already installed.
  Use --force to reinstall, specify a version to install, or try upgrade.
 
+Did you know the proceeds of Pro (and some proceeds from other
+ licensed editions) go into bettering the community infrastructure?
+ Your support ensures an active community, keeps Chocolatey tip-top,
+ plus it nets you some awesome features!
+ https://chocolatey.org/compare
+
 ```
 
 ---
@@ -71,22 +84,27 @@ Warnings:
 
 ```bash
 -- Selecting Windows SDK version 10.0.22000.0 to target Windows 10.0.22621.
--- Configuring done (0.0s)
--- Generating done (0.3s)
+-- Configuring done (0.5s)
+-- Generating done (0.5s)
 -- Build files have been written to: D:/home/desktop/GitHub/gaia-archive-tools/windows-build
 MSBuild version 17.6.3+07e294721 for .NET Framework
 
+  gaia-archive-tools.c
   gaia-archive-tools.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-archive-tools.lib
+  gaia-convert.c
   gaia-convert-sample.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-convert-sample.exe
+  gaia-exp.c
   gaia-exp.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-exp.exe
+  gaia-read.c
   gaia-read-sample.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-read-sample.exe
+  gaia-split.c
   gaia-split.vcxproj -> D:\home\desktop\GitHub\gaia-archive-tools\bin\Debug\gaia-split.exe
 
 ```
 
 ---
     
-build ran for `4.72 s` and terminated with exit code `0`
+build ran for `34.31 s` and terminated with exit code `0`
 
 ---
 

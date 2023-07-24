@@ -1,0 +1,22 @@
+-- The C compiler identification is GNU 10.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/d/home/Desktop/Github/gaia-archive-tools/linux-build
+Scanning dependencies of target gaia-archive-tools
+[ 14%] Building C object CMakeFiles/gaia-archive-tools.dir/gaia-archive-tools/src/gaia-archive-tools.c.o
+[ 28%] Building C object CMakeFiles/gaia-archive-tools.dir/external/csv-fast-reader/csv.c.o
+[ 42%] Linking C static library ../bin/libgaia-archive-tools.a
+[ 42%] Built target gaia-archive-tools
+Scanning dependencies of target gaia-split
+[ 57%] Building C object CMakeFiles/gaia-split.dir/gaia-split/src/gaia-split.c.o
+[ 71%] Linking C executable ../bin/gaia-split
+[ 71%] Built target gaia-split
+Scanning dependencies of target gaia-exp
+[ 85%] Building C object CMakeFiles/gaia-exp.dir/gaia-exp/src/gaia-exp.c.o
+[100%] Linking C executable ../bin/gaia-exp
+[100%] Built target gaia-exp
