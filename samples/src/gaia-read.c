@@ -20,7 +20,9 @@ void printWithSourceExtendedId(const uint32_t read_data, GaiaCelestialBodyFlags 
 
 		printf("source extended id: %s\n", source_extended_id);
 		printf("right ascension: %f deg\n", p_values[0]);
-		printf("declination: %f deg\n\n", p_values[1]);
+		printf("declination: %f deg\n", p_values[1]);
+		printf("baricentric distance: %f pc\n", p_values[2]);
+		printf("teff: %f K\n\n", p_values[3]);
 
 	}
 	
@@ -53,8 +55,8 @@ int main(void) {
 		gaiaUniverseModelGetId(0, src_id); //"0001"
 		printf("Reading ../gaia-bin/gaiaUniverseModel_%s.bin\n", src_id);
 
-		GaiaCelestialBodyFlags read_flags = GAIA_SOURCE_EXTENDED_ID | GAIA_RA | GAIA_DEC;
-		//uint32_t sz = gaiaGetBodySize(read_flags); = 32 bytes
+		GaiaCelestialBodyFlags read_flags = GAIA_SOURCE_EXTENDED_ID | GAIA_RA | GAIA_DEC | GAIA_BARYCENTRIC_DISTANCE | GAIA_TEFF;
+		//uint32_t sz = gaiaGetBodySize(read_flags);// = 40 bytes
 
 		gaiaReadBinaryFileFromID(
 			"../gaia-bin",
