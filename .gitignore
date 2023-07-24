@@ -57,6 +57,7 @@ windows-bin/*
 build/*
 unix-build/*
 windows-build/*
+linux-build/*
 .vscode/*
 .vs/*
 .release/*
@@ -68,5 +69,3 @@ windows-build/*
 *.rar
 
 gaia-resources/*
-
-
