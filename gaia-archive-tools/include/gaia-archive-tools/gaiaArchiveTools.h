@@ -60,6 +60,8 @@ typedef enum GaiaCelestialBodyPropertyIdx {
 #pragma warning (disable: 4293)
 #endif//_MSC_VER
 
+
+//reference here: https://gea.esac.esa.int/archive/documentation/GEDR3/Gaia_archive/chap_datamodel/sec_dm_simulation_tables/ssec_dm_gaia_universe_model.html
 typedef enum GaiaCelestialBodyFlags {
     GAIA_SOURCE_EXTENDED_ID       = 1 << 0,
     GAIA_SOURCE_ID                = 1 << 1,
