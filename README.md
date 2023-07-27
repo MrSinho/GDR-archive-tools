@@ -1,4 +1,4 @@
-# ESA Gaia Archive Tools
+# ESA Gaia (Early) Data Release Archive Tools
 
 [![linux-status](.shci/linux/exit_code.svg)](.shci/linux/log.md)
 [![windows-status](.shci/windows/exit_code.svg)](.shci/windows/log.md)
