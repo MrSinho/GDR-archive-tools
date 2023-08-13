@@ -69,20 +69,27 @@ Mode                 LastWriteTime         Length Name
 To download the original CSV files directly from the Gaia Servers:
 
 ```bash 
-python download_catalogues.py 0 #Download only file 0
-python download_catalogues.py 0 4999 #Download all the files in the given range
+python download-catalogues.py 0 #Download only file 0
+python download-catalogues.py 0 4999 #Download all the files in the given range
 ```
 
 If you want to convert the CSV files in a binary format, do:
 
 ```bash
-python convert_catalogues.py 0 #Convert only file 0 
-python convert_catalogues.py 0 4999 #Convert all the files in the given range 
+python convert-catalogues.py 0 #Convert only file 0 
+python convert-catalogues.py 0 4999 #Convert all the files in the given range 
 ```
 
 In case you need to compress the binaries in a RAR file:
 
 ```bash
-python compress_catalogues.py 0 #Compress only file 0 
-python compress_catalogues.py 0 4999 #Compress all the files in the given range 
+python compress-catalogues.py 0 #Compress only file 0 
+python compress-catalogues.py 0 4999 #Compress all the files in the given range 
+```
+
+To download the binaries from gaia-resources:
+
+```bash 
+python download-release.py 0 #Download only file 0
+python download-release.py 0 4999 #Download all the files in the given range
 ```
