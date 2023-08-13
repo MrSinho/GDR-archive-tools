@@ -67,5 +67,3 @@ linux-build/*
 *.csv.bin
 *.csv.gz
 *.rar
-
-gaia-resources/*
