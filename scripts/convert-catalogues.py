@@ -1,6 +1,6 @@
 import sys
-import subprocess
 import os
+import platform
 
 def id_to_filename(i):
     filename_list = list(str(i))
@@ -14,7 +14,10 @@ def convert_catalogues(range_start, range_end):
         dst_name = "../gaia-bin/gaiaUniverseModel_" + id_to_filename(i) + ".bin"
         print(f"Converting {src_name} to {dst_name}")
         #subprocess.call(f"./../bin/gaia-exp {src_name} {dst_name}", stdout=FNULL, stderr=FNULL, shell=False)
-        subprocess.run(["./../bin/gaia-exp", src_name, dst_name])
+        if (platform.system() == "Windows"):
+            os.system(f"start ../bin/gaia-exp {src_name} {dst_name}" )
+        else:
+            os.system(f"./../bin/gaia-exp {src_name} {dst_name}" )
 
 def main():
     range_start = 0

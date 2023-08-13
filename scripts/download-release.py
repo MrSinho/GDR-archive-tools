@@ -1,8 +1,7 @@
 import sys
 import requests
-import gzip
-import shutil
 import os
+
 
 def id_to_filename(i):
     filename_list = list(str(i))
@@ -10,36 +9,26 @@ def id_to_filename(i):
         filename_list.insert(0, 0)
     return "".join(str(v) for v in filename_list)
 
-def unzip_gaia_catalogue(directory, filename, extension):
-    src = gzip.open(directory+filename+extension, "rb")
-    dst = open(directory+filename+".csv", "wb")
-    shutil.copyfileobj(src, dst)
-
 def download_gaia_catalogue(filename):
-    extension = ".csv.gz"
-    filename  = filename
-    link      = "http://cdn.gea.esac.esa.int/Gaia/gedr3/simulation/gaia_universe_model/" + "GaiaUniverseModel_" + filename + extension
-    directory = "../gaia-csv/"
-    path      = directory + "gaiaUniverseModel_" + filename+extension
-
+    extension = ".bin"
+    filename = filename
+    link = "https://github.com/MrSinho/gaia-resources/releases/download/v1.0.0-alpha/" + "gaiaUniverseModel_" + filename + extension
     print(f"downloading {link}\n")
-    
     buffer = requests.get(link)
-    
+    directory = "../gaia-release/"
+    path = directory+"gaiaUniverseModel_"+filename+extension
     print(f"path: {path}")
-
     file = open(path, "wb")
-    file.write(buffer.content)    
+    file.write(buffer.content)
     file.close()
-    unzip_gaia_catalogue(directory, "gaiaUniverseModel_"+filename, extension)
 
 def download_catalogues(range_start, range_end):
     for i in range (range_start, range_end, 1):
         filename = id_to_filename(i)
         download_gaia_catalogue(filename)
 
-#example call: python download-catalogues.py 0
-#example call: python download-catalogues.py 0 5
+#example call: python download-release.py 0
+#example call: python download-release.py 0 5
 def main():
     range_start = 0
     range_end = 5000
